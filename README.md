@@ -6,44 +6,88 @@
 
 **Professional Photography & Videography Booking Platform**
 
-Livesostory adalah solusi digital terintegrasi yang dirancang untuk memodernisasi proses pemesanan layanan dokumentasi visual. Platform ini menghubungkan klien dengan layanan fotografi eksklusif melalui antarmuka yang elegan dan sistem manajemen yang efisien, memastikan setiap momen berharga terabadikan dengan sempurna.
+Livesostory adalah platform manajemen layanan fotografi dan videografi berbasis web yang dirancang untuk efisiensi bisnis dan pengalaman pelanggan yang premium. Sistem ini mengintegrasikan portofolio digital, pemesanan online, dan manajemen operasional dalam satu ekosistem yang kohesif.
 
-## Arsitektur & Alur Kerja (Workflow)
+## 🏗️ Struktur Proyek (Project Structure)
 
-Sistem ini dirancang dengan alur kerja yang intuitif untuk memastikan pengalaman pengguna yang mulus dari eksplorasi hingga konfirmasi layanan.
+Berikut adalah gambaran umum struktur direktori utama aplikasi ini untuk memudahkan navigasi pengembangan:
 
-### 🌟 Alur Pemesanan Klien (Client Journey)
+```
+livesostory/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── Admin/          # Logika Back-end Dashboard Admin
+│   │   │   │   ├── BookingController.php
+│   │   │   │   ├── PackageController.php
+│   │   │   │   └── ...
+│   │   │   └── BookingController.php  # Logika Front-end Public
+│   │   └── Middleware/         # Auth & Admin Security Guards
+│   └── Models/                 # Eloquent ORM Models (Booking, Package, etc.)
+├── database/
+│   ├── migrations/             # Skema Database & Version Control
+│   └── seeders/                # Data Dummy & Initial Setup
+├── resources/
+│   ├── css/                    # Tailwind CSS Configuration
+│   └── views/                  # Blade Templates
+│       ├── admin/              # Tampilan Dashboard Admin
+│       ├── auth/               # Halaman Login/Register
+│       └── booking/            # Flow Pemesanan User
+└── routes/
+    └── web.php                 # Definisi Rute Aplikasi
+```
 
-1.  **Eksplorasi Visual**: Calon klien mengakses galeri portofolio yang dikurasi secara profesional untuk menilai kualitas, gaya artistik, dan referensi visual layanan kami.
-2.  **Personalisasi Layanan**: Menelusuri katalog paket layanan (Wedding, Pre-wedding, Event, dsb) dan memilih opsi yang sesuai dengan kebutuhan serta anggaran.
-3.  **Reservasi Jadwal Real-time**: Memilih tanggal yang tersedia melalui sistem kalender interaktif yang terhubung langsung dengan ketersediaan tim.
-4.  **Konfirmasi & Finalisasi**: Mengisi formulir detail acara, meninjau ringkasan pesanan, dan melakukan konfirmasi untuk mengamankan slot layanan.
+## 🗄️ Skema Database (Database Schema)
 
-### 👑 Alur Operasional Admin (Administrative Workflow)
+Aplikasi ini menggunakan basis data relasional yang teroptimasi:
 
-1.  **Monitoring Dashboard**: Memantau ringkasan performa bisnis, statistik pesanan masuk, dan detail portofolio melalui dashboard analitik terpusat.
-2.  **Verifikasi Reservasi**: Menerima notifikasi pesanan baru, memverifikasi data klien, dan mengubah status pesanan (Pending -> Confirmed/Completed).
-3.  **Manajemen Jadwal**: Mengelola ketersediaan tim dengan fitur blokir tanggal (manual blocking) untuk mencegah jadwal ganda (_double booking_) pada hari-hari tertentu.
-4.  **Pengelolaan Konten (CMS)**: Memperbarui portofolio terbaru, menambah variasi paket layanan, dan menyesuaikan harga secara dinamis sesuai strategi bisnis.
-5.  **Administrasi Digital**: Mengunduh detail pesanan dan invoice dalam format PDF untuk keperluan arsip, penagihan, dan dokumentasi lapangan.
+- **Users**: Menyimpan data administrator dan petugas.
+- **Packages**: Katalog layanan (Wedding, Event, Studio) beserta harga dan detailnya.
+- **Bookings**: Data transaksi pemesanan, mencakup relasi ke `packages` dan status pembayaran.
+- **Portfolios**: Galeri foto/video yang dikategorikan.
+- **BlockedDates**: Manajemen ketersediaan jadwal untuk mencegah _double booking_.
+- **PaymentAccounts**: Rekening tujuan transfer untuk pembayaran klien.
+- **Settings**: Konfigurasi dinamis website (Hero image, kontak, dll).
 
-## Fitur Unggulan
+## 🔄 Alur Kerja Sistem (System Workflow)
 
-- **Manajemen Portofolio Dinamis**: Upload dan kelola hasil karya foto/video dengan mudah untuk menjaga galeri tetap relevan.
-- **Sistem Booking Terintegrasi**: Kalender otomatis yang sinkron dengan ketersediaan admin, meminimalisir kesalahan penjadwalan.
-- **Invoice & Reporting**: Pembuatan bukti pemesanan otomatis dalam format PDF yang profesional.
-- **Content Management System (CMS)**: Kontrol penuh atas teks, gambar, dan informasi kontak website tanpa perlu menyentuh kode.
-- **Responsif & Modern**: Antarmuka pengguna yang adaptif dan estetik, optimal di desktop maupun perangkat mobile.
+### 🌟 Sisi Pengguna (Client Journey)
 
-## Teknologi
+1.  **Discovery**: Klien menjelajahi portofolio visual dan memilih paket layanan yang diinginkan.
+2.  **Scheduling**: Sistem mengecek ketersediaan tanggal secara _real-time_ dari database.
+3.  **Booking**: Pengisian data acara dan pemilihan metode pembayaran.
+4.  **Confirmation**: Menerima detail invois dan instruksi pembayaran via WhatsApp/Email.
 
-Dibangun menggunakan standar industri modern untuk performa, keamanan, dan skalabilitas terbaik:
+### 👑 Sisi Administrator (Admin Operations)
 
-- **Core Framework**: Laravel 10 (PHP)
-- **Interface**: Blade Templating Engine & Tailwind CSS
-- **Database**: MySQL
-- **Document Generation**: DomPDF
+1.  **Dashboard Monitoring**: Visualisasi metrik bisnis (Total Booking, Pendapatan, Jadwal Terdekat).
+2.  **Approval System**: Validasi bukti pembayaran dan perubahan status booking.
+3.  **Content Management**: Update portofolio dan paket harga tanpa menyentuh kode program.
+4.  **Reporting**: Export data booking ke format PDF resmi untuk dokumentasi fisik.
+
+## 🛡️ Fitur Keamanan & Teknis
+
+- **Role-Based Access Control (RBAC)**: Middleware khusus memastikan hanya admin terautentikasi yang dapat mengakses panel kontrol.
+- **Data Validation**: Validasi input ketat di sisi server untuk integritas data.
+- **Secure File Handling**: Manajemen upload portofolio yang aman.
+- **CSRF Protection**: Proteksi standar Laravel untuk setiap form input.
+
+## 💻 Spesifikasi Teknologi
+
+Dibangun dengan stack teknologi modern yang menjamin performa dan skalabilitas:
+
+| Komponen              | Teknologi             |
+| :-------------------- | :-------------------- |
+| **Backend Framework** | Laravel 10 (PHP 8.1+) |
+| **Frontend Styling**  | Tailwind CSS v3       |
+| **Database**          | MySQL / MariaDB       |
+| **Templating Engine** | Blade                 |
+| **Asset Bundler**     | Vite                  |
+| **PDF Engine**        | DomPDF                |
 
 ---
 
-© Livesostory. All Rights Reserved.
+<p align="center">
+    Developed with ❤️ for <strong>Livesostory</strong><br>
+    &copy; 2024 All Rights Reserved.
+</p>
