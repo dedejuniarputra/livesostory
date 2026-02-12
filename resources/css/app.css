@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        @apply font-display tracking-wide;
+    }
+}
+
+@layer components {
+    .glass {
+        @apply bg-dark-800/40 backdrop-blur-md border border-white/10;
+    }
+
+    .text-gold-gradient {
+        @apply bg-clip-text text-transparent bg-gradient-to-r from-gold-300 via-gold-500 to-gold-400;
+    }
+
+    .btn-gold {
+        @apply px-8 py-3 bg-gold-500 text-dark-950 text-xs tracking-ultra-wide uppercase font-bold hover:bg-gold-400 transition-all duration-500 rounded-sm;
+    }
+
+    .btn-outline {
+        @apply px-8 py-3 border border-white/20 text-white text-xs tracking-ultra-wide uppercase hover:bg-white hover:text-dark-950 transition-all duration-500 rounded-sm;
+    }
+
+    .hide-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.animate-float {
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
