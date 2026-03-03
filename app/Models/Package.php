@@ -11,9 +11,13 @@ class Package extends Model
 
     protected $fillable = [
         'name',
+        'category',
+        'image',
         'description',
         'price',
         'features',
+        'items_included',
+        'item_images',
         'duration',
         'is_featured',
         'is_active',
@@ -22,6 +26,8 @@ class Package extends Model
 
     protected $casts = [
         'features' => 'array',
+        'items_included' => 'array',
+        'item_images' => 'array',
         'price' => 'decimal:2',
         'is_featured' => 'boolean',
         'is_active' => 'boolean',
@@ -44,6 +50,6 @@ class Package extends Model
 
     public function getFormattedPriceAttribute()
     {
-        return 'Rp ' . number_format($this->price, 0, ',', '.');
+        return 'Rp ' . number_format((float) $this->price, 0, ',', '.');
     }
 }

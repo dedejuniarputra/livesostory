@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Redirecting to WhatsApp...</title>
+    <title>LIVESOSTORY.CO — Redirecting to WhatsApp</title>
+    <link rel="icon" type="image/jpeg" href="{{ asset('build/assets/ph.jpeg') }}">
     <style>
         body {
             margin: 0;
@@ -16,10 +18,12 @@
             justify-content: center;
             min-height: 100vh;
         }
+
         .container {
             text-align: center;
             padding: 2rem;
         }
+
         .spinner {
             width: 50px;
             height: 50px;
@@ -29,9 +33,13 @@
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
+
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
+
         h1 {
             font-size: 1.5rem;
             font-weight: 300;
@@ -39,6 +47,7 @@
             margin-bottom: 0.5rem;
             color: #d4af37;
         }
+
         p {
             font-size: 0.875rem;
             color: #999;
@@ -46,6 +55,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="spinner"></div>
@@ -54,11 +64,11 @@
     </div>
 
     <script>
-        (function() {
+        (function () {
             // Open WhatsApp in new tab/window
             var waUrl = '{{ $waUrl }}';
             var newWindow = window.open(waUrl, '_blank');
-            
+
             // Fallback if popup blocked - try to open in same window
             if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
                 // Popup blocked, open in same window
@@ -71,4 +81,5 @@
         })();
     </script>
 </body>
+
 </html>

@@ -43,14 +43,20 @@ class BookingController extends Controller
         return redirect()->route('admin.bookings.index')->with('success', 'Booking berhasil dihapus!');
     }
 
+    public function destroyAll()
+    {
+        Booking::truncate();
+        return redirect()->route('admin.bookings.index')->with('success', 'Semua booking berhasil dihapus!');
+    }
+
     public function exportPdf(Booking $booking)
     {
         $booking->load('package');
-        
+
         $pdf = \PDF::loadView('admin.bookings.pdf', compact('booking'));
-        
+
         $filename = 'Booking-' . $booking->id . '-' . $booking->name . '.pdf';
-        
+
         return $pdf->download($filename);
     }
 }

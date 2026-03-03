@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Package;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PackageController extends Controller
 {
@@ -23,9 +24,12 @@ class PackageController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'category' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'features' => 'nullable|string',
+            'item_images.*' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'duration' => 'nullable|string|max:255',
             'is_featured' => 'boolean',
             'sort_order' => 'nullable|integer',
@@ -34,9 +38,23 @@ class PackageController extends Controller
         $validated['features'] = $validated['features']
             ? array_map('trim', explode("\n", $validated['features']))
             : [];
+
         $validated['is_featured'] = $request->has('is_featured');
         $validated['sort_order'] = $validated['sort_order'] ?? 0;
-        $validated['is_active'] = true; // Default to active
+        $validated['is_active'] = true;
+
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('packages', 'public');
+        }
+
+        // Handle item images
+        if ($request->hasFile('item_images')) {
+            $itemImages = [];
+            foreach ($request->file('item_images') as $file) {
+                $itemImages[] = $file->store('packages/items', 'public');
+            }
+            $validated['item_images'] = $itemImages;
+        }
 
         Package::create($validated);
 
@@ -52,9 +70,12 @@ class PackageController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'category' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'features' => 'nullable|string',
+            'item_images.*' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'duration' => 'nullable|string|max:255',
             'is_featured' => 'boolean',
             'is_active' => 'boolean',
@@ -64,8 +85,33 @@ class PackageController extends Controller
         $validated['features'] = $validated['features']
             ? array_map('trim', explode("\n", $validated['features']))
             : [];
+
         $validated['is_featured'] = $request->has('is_featured');
         $validated['is_active'] = $request->has('is_active');
+
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($package->image) {
+                Storage::disk('public')->delete($package->image);
+            }
+            $validated['image'] = $request->file('image')->store('packages', 'public');
+        }
+
+        // Handle item images (Replace Strategy)
+        if ($request->hasFile('item_images')) {
+            // Delete old item images
+            if ($package->item_images) {
+                foreach ($package->item_images as $oldItem) {
+                    Storage::disk('public')->delete($oldItem);
+                }
+            }
+
+            $itemImages = [];
+            foreach ($request->file('item_images') as $file) {
+                $itemImages[] = $file->store('packages/items', 'public');
+            }
+            $validated['item_images'] = $itemImages;
+        }
 
         $package->update($validated);
 
@@ -74,6 +120,9 @@ class PackageController extends Controller
 
     public function destroy(Package $package)
     {
+        if ($package->image) {
+            Storage::disk('public')->delete($package->image);
+        }
         $package->delete();
         return redirect()->route('admin.packages.index')->with('success', 'Paket berhasil dihapus!');
     }

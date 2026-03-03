@@ -16,11 +16,13 @@ class DatabaseSeeder extends Seeder
         // Settings
         Setting::set('hero_title', 'SOFT LAYERS');
         Setting::set('hero_subtitle', 'timeless stories');
-        Setting::set('hero_description', 'We capture the quiet, intimate layers of your narrative through a cinematic and minimalist lens. Every frame is a tribute to the unseen moments.');
+
         Setting::set('hero_image', 'hero/hero_1.jpg');
-        Setting::set('whatsapp_number', '6281234567890');
-        Setting::set('instagram', '@livesostory.co');
-        Setting::set('email', 'contact@livesostory.co');
+        Setting::set('whatsapp_number', '6282289858037');
+        Setting::set('instagram', 'https://www.instagram.com/livesostory.co');
+        Setting::set('tiktok', 'https://www.tiktok.com/@akangfotoo');
+        Setting::set('email', 'livesostory.co@gmail.com');
+        Setting::set('payment_instructions', "• Transfer sesuai nominal paket (Tanpa pembulatan)\n• Setelah transfer, klik tombol Konfirmasi WhatsApp untuk kirim bukti\n• Booking akan dikonfirmasi dalam 1x24 jam setelah bukti diterima");
 
         // Portfolios
         $portfolioItems = [

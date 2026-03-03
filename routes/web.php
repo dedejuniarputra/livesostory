@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\SettingController;
 
 // Public Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/packages/{category}', [HomeController::class, 'showCategory'])->name('packages.category');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 // Booking Routes (Public)
@@ -28,6 +29,7 @@ Route::get('/booking/{package}', [BookingController::class, 'create'])->name('bo
 Route::post('/booking/{package}', [BookingController::class, 'store'])->name('booking.store');
 Route::get('/booking/payment/{booking}', [BookingController::class, 'payment'])->name('booking.payment');
 Route::post('/booking/confirm/{booking}', [BookingController::class, 'confirm'])->name('booking.confirm');
+Route::post('/booking/cancel/{booking}', [BookingController::class, 'cancel'])->name('booking.cancel');
 
 // API for calendar
 Route::get('/api/available-dates', [BookingController::class, 'getAvailableDates'])->name('api.available-dates');
@@ -51,11 +53,13 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/bookings/{booking}', [AdminBookingController::class, 'show'])->name('bookings.show');
     Route::get('/bookings/{booking}/export-pdf', [AdminBookingController::class, 'exportPdf'])->name('bookings.export-pdf');
     Route::patch('/bookings/{booking}/status', [AdminBookingController::class, 'updateStatus'])->name('bookings.update-status');
+    Route::delete('/bookings/all', [AdminBookingController::class, 'destroyAll'])->name('bookings.destroy-all');
     Route::delete('/bookings/{booking}', [AdminBookingController::class, 'destroy'])->name('bookings.destroy');
 
     // Schedule Management
     Route::get('/schedules', [ScheduleController::class, 'index'])->name('schedules.index');
     Route::post('/schedules/block', [ScheduleController::class, 'blockDate'])->name('schedules.block');
+    Route::delete('/schedules/block/purge', [ScheduleController::class, 'purge'])->name('schedules.purge');
     Route::delete('/schedules/{blockedDate}', [ScheduleController::class, 'unblockDate'])->name('schedules.unblock');
 
     // Payment Accounts
@@ -77,4 +81,4 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::delete('/settings/contact-image', [SettingController::class, 'deleteContactImage'])->name('settings.delete-contact-image');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
