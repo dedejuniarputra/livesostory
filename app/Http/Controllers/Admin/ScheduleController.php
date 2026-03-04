@@ -31,7 +31,6 @@ class ScheduleController extends Controller
 
         $bookings = Booking::with('package')
             ->whereBetween('booking_date', [$startDate, $endDate])
-            ->whereNotIn('status', ['cancelled'])
             ->orderBy('booking_date')
             ->get()
             ->groupBy(fn($item) => $item->booking_date->format('Y-m-d'));

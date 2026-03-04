@@ -3,7 +3,7 @@
         <div class="flex items-center justify-between h-20">
             <!-- Logo -->
             <a href="{{ url('/') }}" class="flex items-center">
-                <img src="{{ asset('build/assets/logo.png') }}" alt="LIVESOSTORY.CO" class="h-8 md:h-10 w-auto">
+                <img src="{{ asset('images/logo.png') }}" alt="LIVESOSTORY.CO" class="h-8 md:h-10 w-auto">
             </a>
 
             <!-- Desktop Menu -->

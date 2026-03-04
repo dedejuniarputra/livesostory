@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class BookingController extends Controller
 {
@@ -12,8 +13,12 @@ class BookingController extends Controller
     {
         $query = Booking::with('package')->latest();
 
-        if ($request->has('status') && $request->status !== 'all') {
-            $query->where('status', $request->status);
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->filled('date')) {
+            $query->whereDate('booking_date', $request->date);
         }
 
         $bookings = $query->paginate(15);
@@ -24,17 +29,6 @@ class BookingController extends Controller
     {
         $booking->load('package');
         return view('admin.bookings.show', compact('booking'));
-    }
-
-    public function updateStatus(Request $request, Booking $booking)
-    {
-        $validated = $request->validate([
-            'status' => 'required|in:pending,completed',
-        ]);
-
-        $booking->update($validated);
-
-        return redirect()->back()->with('success', 'Status booking berhasil diperbarui!');
     }
 
     public function destroy(Booking $booking)
@@ -49,13 +43,20 @@ class BookingController extends Controller
         return redirect()->route('admin.bookings.index')->with('success', 'Semua booking berhasil dihapus!');
     }
 
-    public function exportPdf(Booking $booking)
+
+
+    public function exportAllPdf()
     {
-        $booking->load('package');
+        $bookings = Booking::with('package')
+            ->where('status', 'completed')
+            ->latest()
+            ->get();
 
-        $pdf = \PDF::loadView('admin.bookings.pdf', compact('booking'));
+        $status = 'completed';
 
-        $filename = 'Booking-' . $booking->id . '-' . $booking->name . '.pdf';
+        $pdf = Pdf::loadView('admin.bookings.export-all-pdf', compact('bookings', 'status'));
+
+        $filename = 'Data-Booking-Completed-' . now()->format('d-m-Y') . '.pdf';
 
         return $pdf->download($filename);
     }

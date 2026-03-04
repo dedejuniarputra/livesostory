@@ -14,7 +14,6 @@
             <thead>
                 <tr class="text-xs text-gray-500 uppercase tracking-wider border-b border-dark-700">
                     <th class="text-left px-6 py-3">#</th>
-                    <th class="text-left px-6 py-3">Cover</th>
                     <th class="text-left px-6 py-3">Nama Paket</th>
                     <th class="text-left px-6 py-3">Kategori</th>
                     <th class="text-left px-6 py-3">Harga</th>
@@ -26,19 +25,6 @@
                 @forelse($packages as $package)
                     <tr class="hover:bg-dark-800/30 transition-colors">
                         <td class="px-6 py-3 text-sm text-gray-500">{{ $loop->iteration }}</td>
-                        <td class="px-6 py-3">
-                            @if($package->image)
-                                <img src="{{ asset('storage/' . $package->image) }}" alt="{{ $package->name }}"
-                                    class="w-16 h-12 object-cover rounded border border-dark-700">
-                            @else
-                                <div class="w-16 h-12 bg-dark-700 rounded flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-dark-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
-                                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                    </svg>
-                                </div>
-                            @endif
-                        </td>
                         <td class="px-6 py-3">
                             <p class="text-sm text-white">{{ $package->name }}</p>
                         </td>

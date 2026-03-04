@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth overflow-x-hidden">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
@@ -12,13 +11,12 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
-    <link rel="icon" type="image/jpeg" href="{{ asset('build/assets/ph.jpeg') }}">
+    <link rel="icon" type="image/jpeg" href="{{ asset('images/ph.jpeg') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         [x-cloak] {
             display: none !important;
         }
-
         /* Global Scroll Lock */
         html,
         body {
@@ -30,10 +28,8 @@
 </head>
 
 <body class="bg-dark-950 text-white font-sans antialiased overflow-x-hidden">
-
     <!-- Navbar -->
     <x-navbar class="bg-transparent" />
-
     <!-- Hero Section -->
     <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden">
         <!-- Background -->
@@ -50,7 +46,7 @@
         <!-- Content -->
         <div class="relative z-10 text-center px-6 max-w-4xl mx-auto">
             <h1
-                class="font-display text-6xl md:text-8xl lg:text-9xl font-light tracking-ultra-wide mb-6 animate-fade-in text-gold-gradient">
+                class="font-display text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-light tracking-ultra-wide mb-6 animate-fade-in text-gold-gradient">
                 {{ $settings['hero_title'] }}
             </h1>
             <p
@@ -95,36 +91,64 @@
                         @foreach($packageCategories as $cat)
                             <a href="{{ route('packages.category', $cat->slug) }}"
                                 class="group flex-shrink-0 w-[280px] md:w-[300px] lg:w-[340px] relative overflow-hidden rounded category-card aspect-[4/5] snap-start block">
-                                @if($cat->cover_image)
+                                @if($cat->image)
                                     <!-- With Image -->
-                                    <img src="{{ asset('storage/' . $cat->cover_image) }}" alt="{{ $cat->name }}"
+                                    <img src="{{ asset('storage/' . $cat->image) }}" alt="{{ $cat->name }}"
                                         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                                     <div
                                         class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500">
                                         <div class="absolute bottom-0 left-0 right-0 p-6">
                                             <h3 class="font-display text-xl font-light tracking-wide text-white">{{ $cat->name }}
                                             </h3>
-                                            <p class="text-gold-400 text-[10px] tracking-[0.2em] uppercase mt-1.5">{{ $cat->count }}
-                                                {{ $cat->count > 1 ? 'Packages' : 'Package' }}</p>
+                                            @if($cat->description)
+                                                <p class="text-gray-300 text-xs mt-2 line-clamp-2">{{ $cat->description }}</p>
+                                            @endif
+                                            <p class="text-gold-400 text-[10px] tracking-[0.2em] uppercase mt-1.5">{{ $cat->packages_count }}
+                                                {{ $cat->packages_count > 1 ? 'Packages' : 'Package' }}</p>
                                         </div>
                                     </div>
                                 @else
-                                    <!-- Placeholder with consistent design -->
-                                    <div class="w-full h-full bg-dark-900 border border-dark-800 rounded group-hover:border-gold-500/30 transition-all duration-700 flex flex-col items-center justify-center relative overflow-hidden shadow-2xl">
-                                        <!-- Animated decorative circle -->
-                                        <div class="absolute -bottom-16 -right-16 w-48 h-48 bg-gold-400/5 rounded-full blur-3xl group-hover:bg-gold-400/10 transition-all duration-1000"></div>
-                                        
-                                        <div class="relative z-10 text-center px-6">
-                                            <div class="w-10 h-px bg-gold-400/20 mx-auto mb-6 group-hover:w-16 group-hover:bg-gold-400/50 transition-all duration-700"></div>
-                                            <h3 class="font-display text-2xl md:text-3xl font-light tracking-wide text-gray-300 group-hover:text-white transition-colors duration-500">
+                                    <!-- Elegant Placeholder -->
+                                    <div class="w-full h-full relative overflow-hidden rounded shadow-2xl">
+                                        <!-- Gradient Background -->
+                                        <div class="absolute inset-0 bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900"></div>
+                                        <!-- Subtle radial glow -->
+                                        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(180,160,100,0.08)_0%,_transparent_70%)] group-hover:bg-[radial-gradient(circle_at_center,_rgba(180,160,100,0.15)_0%,_transparent_70%)] transition-all duration-1000"></div>
+                                        <!-- Decorative corner accents -->
+                                        <div class="absolute top-4 left-4 w-8 h-8 border-t border-l border-gold-400/20 group-hover:border-gold-400/50 group-hover:w-10 group-hover:h-10 transition-all duration-700"></div>
+                                        <div class="absolute bottom-4 right-4 w-8 h-8 border-b border-r border-gold-400/20 group-hover:border-gold-400/50 group-hover:w-10 group-hover:h-10 transition-all duration-700"></div>
+
+                                        <div class="relative z-10 w-full h-full flex flex-col items-center justify-center px-6">
+                                            <!-- Camera Aperture Icon -->
+                                            <div class="mb-6 opacity-30 group-hover:opacity-60 transition-all duration-700 group-hover:scale-110">
+                                                <svg class="w-16 h-16 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="0.8">
+                                                    <circle cx="12" cy="12" r="10" />
+                                                    <circle cx="12" cy="12" r="4" />
+                                                    <line x1="12" y1="2" x2="12" y2="6" />
+                                                    <line x1="12" y1="18" x2="12" y2="22" />
+                                                    <line x1="2" y1="12" x2="6" y2="12" />
+                                                    <line x1="18" y1="12" x2="22" y2="12" />
+                                                    <line x1="4.93" y1="4.93" x2="7.76" y2="7.76" />
+                                                    <line x1="16.24" y1="16.24" x2="19.07" y2="19.07" />
+                                                    <line x1="4.93" y1="19.07" x2="7.76" y2="16.24" />
+                                                    <line x1="16.24" y1="7.76" x2="19.07" y2="4.93" />
+                                                </svg>
+                                            </div>
+
+                                            <!-- Category Name -->
+                                            <h3 class="font-display text-2xl md:text-3xl font-light tracking-wide text-gray-300 group-hover:text-white transition-colors duration-500 text-center">
                                                 {{ $cat->name }}
                                             </h3>
-                                            <div class="w-10 h-px bg-gold-400/20 mx-auto mt-6 group-hover:w-16 group-hover:bg-gold-400/50 transition-all duration-700"></div>
-                                            
-                                            <p class="text-gold-400/60 text-[10px] tracking-[0.2em] uppercase mt-8 group-hover:text-gold-400 transition-colors duration-500">
+                                            <div class="w-10 h-px bg-gold-400/30 mx-auto mt-4 group-hover:w-20 group-hover:bg-gold-400/70 transition-all duration-700"></div>
+
+                                            <!-- Package Count -->
+                                            <p class="text-gold-400/50 text-[10px] tracking-[0.2em] uppercase mt-5 group-hover:text-gold-400 transition-colors duration-500">
                                                 {{ $cat->count }} {{ Str::plural('Package', $cat->count) }}
                                             </p>
                                         </div>
+
+                                        <!-- Border overlay -->
+                                        <div class="absolute inset-0 border border-dark-700/50 rounded group-hover:border-gold-500/30 transition-all duration-700 pointer-events-none"></div>
                                     </div>
                                 @endif
                             </a>
@@ -193,7 +217,7 @@
                         id="portfolio-scroll">
                         @for($i = 0; $i < 5; $i++)
                             <div
-                                class="group flex-shrink-0 w-[280px] md:w-[300px] lg:w-[340px] relative overflow-hidden rounded category-card aspect-[4/5] snap-start block bg-dark-800 border border-dark-700/40 flex items-center justify-center">
+                                class="group flex-shrink-0 w-[280px] md:w-[300px] lg:w-[340px] relative overflow-hidden rounded category-card aspect-[4/5] snap-start bg-dark-800 border border-dark-700/40 flex items-center justify-center">
                                 <div class="text-center">
                                     <svg class="w-12 h-12 text-dark-600 mx-auto mb-2" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
@@ -237,54 +261,55 @@
                         Ready to create beautiful memories? Reach out to us and let's plan your perfect session.
                     </p>
 
-                    <div class="space-y-6">
+                    <div class="flex flex-wrap items-center gap-6">
                         <!-- Phone -->
                         <a href="https://wa.me/6289601350794"
-                            target="_blank" class="flex items-center space-x-4 group/contact w-fit">
+                            target="_blank" class="flex flex-col items-center space-y-2 group/contact">
                             <div
-                                class="w-10 h-10 border border-dark-700 flex items-center justify-center transition-all duration-300 group-hover/contact:border-gold-400 group-hover/contact:bg-gold-400/10 group-hover/contact:scale-110 active:scale-95">
-                                <svg class="w-4 h-4 text-gold-400" fill="none" stroke="currentColor"
+                                class="w-12 h-12 rounded-full border border-dark-700 flex items-center justify-center transition-all duration-300 group-hover/contact:border-gold-400 group-hover/contact:bg-gold-400/10 group-hover/contact:scale-110 group-hover/contact:shadow-[0_0_15px_rgba(212,175,55,0.2)] active:scale-95">
+                                <svg class="w-5 h-5 text-gold-400" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                         d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                                 </svg>
                             </div>
-                            <span
-                                class="text-gray-400 text-sm group-hover/contact:text-gold-400 transition-colors">6289601350794</span>
+                            <span class="text-gray-400 text-xs tracking-wider group-hover/contact:text-gold-400 transition-colors">WhatsApp</span>
                         </a>
 
                         <!-- TikTok -->
                         @php
                             $tiktokValue = App\Models\Setting::get('tiktok', 'https://www.tiktok.com/@akangfotoo');
                             $tiktokHref = str_contains($tiktokValue, 'http') ? $tiktokValue : 'https://www.tiktok.com/' . ltrim($tiktokValue, '@');
-                            $tiktokDisplay = str_contains($tiktokValue, 'http') ? '@' . basename($tiktokValue) : $tiktokValue;
+                            $tiktokUsername = str_contains($tiktokValue, 'http') ? basename(parse_url($tiktokValue, PHP_URL_PATH)) : $tiktokValue;
+                            $tiktokDisplay = '@' . ltrim($tiktokUsername, '@');
                         @endphp
                         <a href="{{ $tiktokHref }}" target="_blank"
-                            class="flex items-center space-x-4 group/contact w-fit">
-                            <div class="w-10 h-10 border border-dark-700 flex items-center justify-center transition-all duration-300 group-hover/contact:border-gold-400 group-hover/contact:bg-gold-400/10 group-hover/contact:scale-110 active:scale-95">
-                                <svg class="w-4 h-4 text-gold-400" fill="currentColor" viewBox="0 0 448 512">
+                            class="flex flex-col items-center space-y-2 group/contact">
+                            <div class="w-12 h-12 rounded-full border border-dark-700 flex items-center justify-center transition-all duration-300 group-hover/contact:border-gold-400 group-hover/contact:bg-gold-400/10 group-hover/contact:scale-110 group-hover/contact:shadow-[0_0_15px_rgba(212,175,55,0.2)] active:scale-95">
+                                <svg class="w-5 h-5 text-gold-400" fill="currentColor" viewBox="0 0 448 512">
                                     <path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z"/>
                                 </svg>
                             </div>
-                            <span class="text-gray-400 text-sm group-hover/contact:text-gold-400 transition-colors">{{ $tiktokDisplay }}</span>
+                            <span class="text-gray-400 text-xs tracking-wider group-hover/contact:text-gold-400 transition-colors">TikTok</span>
                         </a>
 
                         <!-- Instagram -->
                         @php
                             $igValue = App\Models\Setting::get('instagram', 'https://www.instagram.com/livesostory.co');
                             $igHref = str_contains($igValue, 'http') ? $igValue : 'https://www.instagram.com/' . ltrim($igValue, '@');
-                            $igDisplay = str_contains($igValue, 'http') ? '@' . ltrim(parse_url($igValue, PHP_URL_PATH), '/') : $igValue;
+                            $igUsername = str_contains($igValue, 'http') ? basename(parse_url($igValue, PHP_URL_PATH)) : $igValue;
+                            $igDisplay = '@' . ltrim($igUsername, '@');
                         @endphp
                         <a href="{{ $igHref }}" target="_blank"
-                            class="flex items-center space-x-4 group/contact w-fit">
+                            class="flex flex-col items-center space-y-2 group/contact">
                             <div
-                                class="w-10 h-10 border border-dark-700 flex items-center justify-center transition-all duration-300 group-hover/contact:border-gold-400 group-hover/contact:bg-gold-400/10 group-hover/contact:scale-110 active:scale-95">
-                                <svg class="w-4 h-4 text-gold-400" fill="currentColor" viewBox="0 0 24 24">
+                                class="w-12 h-12 rounded-full border border-dark-700 flex items-center justify-center transition-all duration-300 group-hover/contact:border-gold-400 group-hover/contact:bg-gold-400/10 group-hover/contact:scale-110 group-hover/contact:shadow-[0_0_15px_rgba(212,175,55,0.2)] active:scale-95">
+                                <svg class="w-5 h-5 text-gold-400" fill="currentColor" viewBox="0 0 24 24">
                                     <path
                                         d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204 0.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
                                 </svg>
                             </div>
-                            <span class="text-gray-400 text-sm group-hover/contact:text-gold-400 transition-colors">{{ $igDisplay }}</span>
+                            <span class="text-gray-400 text-xs tracking-wider group-hover/contact:text-gold-400 transition-colors">Instagram</span>
                         </a>
                     </div>
                 </div>
@@ -325,27 +350,29 @@
 
     <!-- Footer -->
     <footer class="py-8 bg-dark-900 border-t border-dark-800">
-        <div class="max-w-7xl mx-auto px-3 lg:px-4">
-            <div class="flex flex-col items-center justify-center text-center space-y-4">
-                <p class="text-gray-400/60 text-[10px] tracking-widest uppercase">&copy; {{ date('Y') }} LIVESOSTORY.CO. All rights reserved.</p>
-            </div>
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col items-center text-center">
+            <p class="text-gray-400/60 text-[10px] tracking-widest uppercase">&copy; {{ date('Y') }}
+                LIVESOSTORY.CO. All rights reserved.</p>
         </div>
     </footer>
 
     <script>
-
         // Scroll Categories horizontally
         function scrollCategories(direction) {
             const container = document.getElementById('category-scroll');
-            const cardWidth = container.querySelector('.category-card').offsetWidth + 24;
-            container.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
+            if (container) {
+                const cardWidth = container.querySelector('.category-card').offsetWidth + 24;
+                container.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
+            }
         }
 
         // Scroll Portfolio horizontally
         function scrollPortfolio(direction) {
             const container = document.getElementById('portfolio-scroll');
-            const cardWidth = container.querySelector('.category-card').offsetWidth + 24;
-            container.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
+            if (container) {
+                const cardWidth = container.querySelector('.category-card').offsetWidth + 24;
+                container.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
+            }
         }
     </script>
 

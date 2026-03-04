@@ -17,19 +17,18 @@ class PackageController extends Controller
 
     public function create()
     {
-        return view('admin.packages.create');
+        $categories = \App\Models\Category::active()->ordered()->get();
+        return view('admin.packages.create', compact('categories'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'category' => 'nullable|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
+            'category_id' => 'required|exists:categories,id',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'features' => 'nullable|string',
-            'item_images.*' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'duration' => 'nullable|string|max:255',
             'is_featured' => 'boolean',
             'sort_order' => 'nullable|integer',
@@ -43,18 +42,12 @@ class PackageController extends Controller
         $validated['sort_order'] = $validated['sort_order'] ?? 0;
         $validated['is_active'] = true;
 
-        if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('packages', 'public');
-        }
+        // Keep the old category name in sync just in case it's needed during transition
+        $category = \App\Models\Category::find($validated['category_id']);
+        $validated['category'] = $category ? $category->name : null;
 
-        // Handle item images
-        if ($request->hasFile('item_images')) {
-            $itemImages = [];
-            foreach ($request->file('item_images') as $file) {
-                $itemImages[] = $file->store('packages/items', 'public');
-            }
-            $validated['item_images'] = $itemImages;
-        }
+
+
 
         Package::create($validated);
 
@@ -63,19 +56,18 @@ class PackageController extends Controller
 
     public function edit(Package $package)
     {
-        return view('admin.packages.edit', compact('package'));
+        $categories = \App\Models\Category::active()->ordered()->get();
+        return view('admin.packages.edit', compact('package', 'categories'));
     }
 
     public function update(Request $request, Package $package)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'category' => 'nullable|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
+            'category_id' => 'required|exists:categories,id',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'features' => 'nullable|string',
-            'item_images.*' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'duration' => 'nullable|string|max:255',
             'is_featured' => 'boolean',
             'is_active' => 'boolean',
@@ -89,29 +81,8 @@ class PackageController extends Controller
         $validated['is_featured'] = $request->has('is_featured');
         $validated['is_active'] = $request->has('is_active');
 
-        if ($request->hasFile('image')) {
-            // Delete old image if exists
-            if ($package->image) {
-                Storage::disk('public')->delete($package->image);
-            }
-            $validated['image'] = $request->file('image')->store('packages', 'public');
-        }
 
-        // Handle item images (Replace Strategy)
-        if ($request->hasFile('item_images')) {
-            // Delete old item images
-            if ($package->item_images) {
-                foreach ($package->item_images as $oldItem) {
-                    Storage::disk('public')->delete($oldItem);
-                }
-            }
 
-            $itemImages = [];
-            foreach ($request->file('item_images') as $file) {
-                $itemImages[] = $file->store('packages/items', 'public');
-            }
-            $validated['item_images'] = $itemImages;
-        }
 
         $package->update($validated);
 
@@ -120,10 +91,16 @@ class PackageController extends Controller
 
     public function destroy(Package $package)
     {
-        if ($package->image) {
-            Storage::disk('public')->delete($package->image);
+        if ($package->item_images) {
+            foreach ($package->item_images as $img) {
+                Storage::disk('public')->delete($img);
+            }
         }
         $package->delete();
         return redirect()->route('admin.packages.index')->with('success', 'Paket berhasil dihapus!');
     }
+
+
+
+
 }

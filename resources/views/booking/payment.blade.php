@@ -8,7 +8,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
-    <link rel="icon" type="image/jpeg" href="{{ asset('build/assets/ph.jpeg') }}">
+    <link rel="icon" type="image/jpeg" href="{{ asset('images/ph.jpeg') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
@@ -17,7 +17,10 @@
     <!-- Navbar -->
     <x-navbar class="bg-dark-950/95 backdrop-blur-md border-b border-dark-800" />
 
-    <div class="max-w-3xl mx-auto px-6 lg:px-8 pt-32 pb-12">
+    <!-- Spacer to push content below the fixed navbar (navbar height = h-20) -->
+    <div class="h-24"></div>
+
+    <div class="max-w-3xl mx-auto px-6 lg:px-8 pb-12">
         <!-- Success Message -->
         <div class="text-center mb-10">
             <div
@@ -41,7 +44,7 @@
         </div>
 
         <!-- Payment Modal Popup -->
-        <div id="payment-modal" class="fixed inset-0 z-[60] flex items-center justify-center hidden p-6">
+        <div id="payment-modal" class="fixed inset-0 z-[60] items-center justify-center hidden p-6">
             <div class="absolute inset-0 bg-dark-950/80 backdrop-blur-sm" onclick="closeModal()"></div>
             <div class="relative bg-dark-900 border border-gold-400/30 p-8 max-w-lg w-full shadow-2xl transform transition-all duration-300 scale-95 opacity-0"
                 id="modal-content">
@@ -261,6 +264,7 @@
             const content = document.getElementById('modal-content');
 
             modal.classList.remove('hidden');
+            modal.classList.add('flex');
             setTimeout(() => {
                 content.classList.remove('scale-95', 'opacity-0');
                 content.classList.add('scale-100', 'opacity-100');

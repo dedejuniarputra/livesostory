@@ -72,8 +72,9 @@
                     </p>
                 </div>
                 <button type="submit"
-                    class="w-full px-4 py-2.5 bg-red-500 text-white text-xs tracking-widest uppercase font-semibold hover:bg-red-600 transition-colors rounded">Simpan
-                    Pemblokiran</button>
+                    class="w-full px-4 py-3 bg-red-600 text-white text-xs tracking-widest uppercase font-black hover:bg-red-700 transition-all rounded shadow-lg shadow-red-900/20 active:scale-[0.98]">
+                    SIMPAN PEMBLOKIRAN
+                </button>
             </form>
 
             <div class="mt-4 p-4 bg-dark-800/20 border border-dark-700/50 rounded">
@@ -187,15 +188,16 @@
                         @endphp
 
                         <div class="calendar-day aspect-square relative flex flex-col items-center justify-center p-2 transition-all duration-200 group
-                                                                                                            {{ $isPast ? 'bg-dark-900/40 opacity-40 cursor-default' : 'bg-dark-900 cursor-pointer hover:bg-dark-800' }}"
-                            id="cell-{{ $dateStr }}" @if(!$isPast) onclick="toggleDateSelection('{{ $dateStr }}')" @endif>
+                                    {{ $isPast ? 'bg-dark-900/40 opacity-40 cursor-default' : ($isBlocked ? 'bg-red-500/20' : 'bg-dark-900') }}
+                                    {{ $isPast ? '' : 'cursor-pointer hover:bg-dark-800' }}" id="cell-{{ $dateStr }}"
+                            @if(!$isPast) onclick="toggleDateSelection('{{ $dateStr }}', event)" @endif>
 
                             <span
-                                class="text-sm font-light {{ $isToday ? 'text-gold-400 font-bold' : 'text-gray-300' }} group-hover:text-white">{{ $day }}</span>
+                                class="text-sm pointer-events-none {{ $isBlocked ? 'text-red-500 font-bold' : ($isToday ? 'text-gold-400 font-bold' : 'text-gray-300') }} group-hover:text-white">{{ $day }}</span>
 
-                            <div class="mt-2 flex flex-col items-center flex-1 justify-end pb-1 w-full">
+                            <div class="mt-2 flex flex-col items-center flex-1 justify-end pb-1 w-full pointer-events-none">
                                 @if($isBlocked)
-                                    <span class="text-[10px] uppercase font-bold tracking-tight text-red-500/80">Libur</span>
+                                    <span class="text-[10px] uppercase font-black tracking-wider text-red-500">Libur</span>
                                 @elseif($isFull)
                                     <span class="text-[10px] uppercase font-bold tracking-tight text-red-400">Penuh</span>
                                 @elseif($isAvailable)
@@ -314,14 +316,12 @@
                     syncCalendarHighlights();
                 },
                 onChange: function (selectedDates, dateStr, instance) {
-                    // Sync common input values
-                    setTimeout(() => {
-                        const otherPicker = (instance.element.id === 'datepicker') ? picker_slots : picker_block;
-                        if (otherPicker && otherPicker.input && otherPicker.input.value !== dateStr) {
-                            otherPicker.setDate(dateStr, false);
-                        }
-                        syncCalendarHighlights();
-                    }, 50);
+                    // Sync common input values when manually changed in flatpickr popup
+                    const otherPicker = (instance.element.id === 'datepicker') ? picker_slots : picker_block;
+                    if (otherPicker && otherPicker.setDate) {
+                        otherPicker.setDate(selectedDates, false);
+                    }
+                    syncCalendarHighlights();
                 }
             };
 
@@ -333,12 +333,16 @@
             function syncCalendarHighlights() {
                 const el = document.getElementById('datepicker');
                 if (!el) return;
-                const selectedStr = el.value;
-                const selectedArray = selectedStr ? selectedStr.split(',') : [];
 
+                const selectedStr = el.value;
+                const selectedArray = selectedStr ? selectedStr.split(',').map(d => d.trim()) : [];
+
+                // Clear all highlights
                 document.querySelectorAll('.selection-indicator').forEach(el => el.style.opacity = '0');
 
+                // Apply new highlights
                 selectedArray.forEach(date => {
+                    if (!date) return;
                     const cell = document.getElementById(`cell-${date}`);
                     if (cell) {
                         const indicator = cell.querySelector('.selection-indicator');
@@ -348,21 +352,40 @@
             }
 
             function toggleDateSelection(date) {
-                if (!picker_block || !picker_slots) return;
+                if (!picker_block || !picker_slots) {
+                    console.error('Pickers not initialized');
+                    return;
+                }
 
-                let currentDates = picker_block.selectedDates.map(d => picker_block.formatDate(d, "Y-m-d"));
+                // Get current dates as a simple list of Y-m-d strings
+                let currentDates = picker_block.selectedDates.map(d => {
+                    const year = d.getFullYear();
+                    const month = String(d.getMonth() + 1).padStart(2, '0');
+                    const day = String(d.getDate()).padStart(2, '0');
+                    return `${year}-${month}-${day}`;
+                });
+
                 const index = currentDates.indexOf(date);
-
                 if (index > -1) {
                     currentDates.splice(index, 1);
                 } else {
                     currentDates.push(date);
                 }
 
-                const finalDateStr = currentDates.join(',');
-                picker_block.setDate(finalDateStr, true);
+                // Update BOTH pickers explicitly and immediately
+                picker_block.setDate(currentDates, true); // triggerChange=true to ensure inputs update
+                picker_slots.setDate(currentDates, true);
+
+                // Extra safety: force the input values directly if they don't sync
+                const dateStr = currentDates.join(',');
+                document.getElementById('datepicker').value = dateStr;
+                document.getElementById('datepicker_slots').value = dateStr;
+
+                console.log('Selected dates updated:', dateStr);
+                syncCalendarHighlights();
             }
         </script>
     @endpush
 
 @endsection
+```

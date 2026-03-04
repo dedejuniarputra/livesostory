@@ -8,7 +8,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
-    <link rel="icon" type="image/jpeg" href="{{ asset('build/assets/ph.jpeg') }}">
+    <link rel="icon" type="image/jpeg" href="{{ asset('images/ph.jpeg') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
@@ -17,7 +17,10 @@
     <!-- Navbar -->
     <x-navbar class="bg-dark-950/95 backdrop-blur-md border-b border-dark-800" />
 
-    <div class="max-w-5xl mx-auto px-6 lg:px-8 pt-32 pb-12">
+    <!-- Spacer to push content below the fixed navbar (navbar height = h-20) -->
+    <div class="h-24"></div>
+
+    <div class="max-w-5xl mx-auto px-6 lg:px-8 pb-12">
         <div class="grid lg:grid-cols-3 gap-10">
             <!-- Package Summary -->
             <div class="lg:col-span-1">
@@ -109,48 +112,68 @@
                                 {{ $message }}
                             </div>
                         @enderror
-                        <div id="calendar-container" class="bg-dark-800/50 border border-dark-700 p-6">
-                            <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-sm font-medium text-white">Jadwal & Slot: <span id="calendar-month"></span>
+                            </h3>
+                            <div class="flex items-center gap-2">
                                 <button type="button" id="prev-month"
-                                    class="text-gray-400 hover:text-white transition-colors">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    class="p-1.5 bg-dark-800 border border-dark-700 rounded hover:bg-dark-700 transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M15 19l-7-7 7-7" />
                                     </svg>
                                 </button>
-                                <h3 id="calendar-month" class="text-sm tracking-widest uppercase text-white"></h3>
                                 <button type="button" id="next-month"
-                                    class="text-gray-400 hover:text-white transition-colors">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    class="p-1.5 bg-dark-800 border border-dark-700 rounded hover:bg-dark-700 transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M9 5l7 7-7 7" />
                                     </svg>
                                 </button>
                             </div>
-                            <div class="grid grid-cols-7 gap-1 mb-2">
-                                <div class="text-center text-xs text-gray-500 py-2">Min</div>
-                                <div class="text-center text-xs text-gray-500 py-2">Sen</div>
-                                <div class="text-center text-xs text-gray-500 py-2">Sel</div>
-                                <div class="text-center text-xs text-gray-500 py-2">Rab</div>
-                                <div class="text-center text-xs text-gray-500 py-2">Kam</div>
-                                <div class="text-center text-xs text-gray-500 py-2">Jum</div>
-                                <div class="text-center text-xs text-gray-500 py-2">Sab</div>
-                            </div>
-                            <div id="calendar-days" class="grid grid-cols-7 gap-1"></div>
+                        </div>
 
-                            <div class="flex items-center gap-6 mt-8 pt-8 border-t border-dark-700">
-                                <div class="flex items-center gap-2">
-                                    <div class="w-3 h-3 bg-green-500/20 border border-green-500/50 rounded-sm"></div>
-                                    <span class="text-xs text-gray-500">Tersedia</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <div class="w-3 h-3 bg-red-500/20 border border-red-500/50 rounded-sm"></div>
-                                    <span class="text-xs text-gray-500">Penuh/Libur</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <div class="w-3 h-3 bg-gold-400 rounded-sm"></div>
-                                    <span class="text-xs text-gray-500">Dipilih</span>
-                                </div>
+                        <div id="calendar-container"
+                            class="bg-dark-800/30 border border-dark-700 rounded-sm overflow-hidden">
+                            <div class="grid grid-cols-7 border-b border-dark-700 bg-dark-900/50">
+                                <div
+                                    class="py-3 text-center text-[10px] uppercase tracking-widest text-gray-500 font-semibold">
+                                    Min</div>
+                                <div
+                                    class="py-3 text-center text-[10px] uppercase tracking-widest text-gray-500 font-semibold">
+                                    Sen</div>
+                                <div
+                                    class="py-3 text-center text-[10px] uppercase tracking-widest text-gray-500 font-semibold">
+                                    Sel</div>
+                                <div
+                                    class="py-3 text-center text-[10px] uppercase tracking-widest text-gray-500 font-semibold">
+                                    Rab</div>
+                                <div
+                                    class="py-3 text-center text-[10px] uppercase tracking-widest text-gray-500 font-semibold">
+                                    Kam</div>
+                                <div
+                                    class="py-3 text-center text-[10px] uppercase tracking-widest text-gray-500 font-semibold">
+                                    Jum</div>
+                                <div
+                                    class="py-3 text-center text-[10px] uppercase tracking-widest text-gray-500 font-semibold">
+                                    Sab</div>
+                            </div>
+                            <div id="calendar-days" class="grid grid-cols-7 gap-px bg-dark-700"></div>
+                        </div>
+
+                        <div
+                            class="mt-6 flex flex-wrap items-center gap-6 text-[10px] text-gray-500 uppercase tracking-widest">
+                            <div class="flex items-center gap-2">
+                                <div class="w-3 h-3 bg-green-500/20 border border-green-500/30 rounded-sm"></div>
+                                <span>Tersedia</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <div class="w-3 h-3 bg-red-500/20 border border-red-500/40 rounded-sm"></div>
+                                <span>Penuh / Libur</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <div class="w-3 h-3 bg-gold-400 rounded-sm"></div>
+                                <span>Dipilih</span>
                             </div>
                         </div>
                         <input type="hidden" name="booking_date" id="selected-date" value="{{ old('booking_date') }}"
@@ -207,45 +230,55 @@
 
             // Empty cells
             for (let i = 0; i < firstDay; i++) {
-                html += '<div></div>';
+                html += '<div class="aspect-square bg-dark-950/40"></div>';
             }
 
             for (let day = 1; day <= daysInMonth; day++) {
                 const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                 const dateObj = new Date(currentYear, currentMonth, day);
-                const isPast = dateObj <= today;
+                const isPast = dateObj < today;
+                const isToday = dateObj.getTime() === today.getTime();
 
                 const dayData = datesData[dateStr] || { remaining_slots: 0, total_slots: 0, is_blocked: false };
-                const isAvailable = !isPast && dayData.remaining_slots > 0;
+                const isAvailable = !isPast && (dayData.remaining_slots > 0 && !dayData.is_blocked);
                 const isSelected = selectedDate === dateStr;
 
-                let classes = 'flex flex-col items-center justify-center py-2 text-sm rounded-sm transition-all duration-200 ';
+                let classes = 'aspect-square relative flex flex-col items-center justify-center p-2 transition-all duration-200 group ';
                 let statusText = '';
 
-                if (isSelected) {
+                if (isPast) {
+                    classes += 'bg-dark-900/40 opacity-40 cursor-default';
+                } else if (isSelected) {
                     classes += 'bg-gold-400 text-dark-950 font-semibold cursor-pointer';
-                } else if (!isAvailable) {
-                    classes += 'bg-red-500/10 text-red-400/50 cursor-not-allowed line-through';
-                    if (isPast) {
-                        statusText = '<span class="text-[8px] opacity-0">.</span>'; // Spacer
-                    } else if (dayData.is_blocked) {
-                        statusText = '<span class="text-[10px] uppercase font-bold tracking-tight">Libur</span>';
-                    } else {
-                        statusText = '<span class="text-[10px] uppercase font-bold tracking-tight">Penuh</span>';
-                    }
+                } else if (dayData.is_blocked && !isPast) {
+                    classes += 'bg-red-500/20 cursor-not-allowed';
                 } else {
-                    classes += 'bg-green-500/10 text-green-400 cursor-pointer hover:bg-gold-400/20 hover:text-gold-400';
+                    classes += 'bg-dark-900 cursor-pointer hover:bg-dark-800';
+                }
+
+                const dayNumberClass = isToday ? 'text-gold-400 font-bold' : (isSelected ? 'text-dark-950' : (dayData.is_blocked && !isPast ? 'text-red-500 font-bold' : 'text-gray-300'));
+
+                if (isPast) {
+                    statusText = '';
+                } else if (dayData.is_blocked || (dayData.total_slots > 0 && dayData.remaining_slots <= 0)) {
+                    const blockMsg = dayData.is_blocked ? 'Libur' : 'Penuh';
+                    const weightClass = dayData.is_blocked ? 'font-black tracking-widest' : 'font-bold tracking-tight';
+                    statusText = `<span class="text-[10px] uppercase ${weightClass} text-red-500 mt-2">${blockMsg}</span>`;
+                } else if (isAvailable) {
                     statusText = `
-                        <div class="flex flex-col items-center leading-none mt-1">
-                            <span class="text-sm font-black">${dayData.remaining_slots}</span>
-                            <span class="text-[7px] uppercase font-bold tracking-tighter opacity-70">Slot</span>
-                        </div>`;
+                        <span class="text-sm font-black text-green-400 transition-colors">${dayData.remaining_slots}</span>
+                        <span class="text-[7px] uppercase font-bold tracking-tighter text-gray-500 -mt-1 group-hover:text-gray-400 transition-colors">Slot</span>`;
                 }
 
                 html += `
                     <div class="${classes}" ${isAvailable ? `onclick="selectDate('${dateStr}', ${day})"` : ''}>
-                        <span class="text-sm">${day}</span>
-                        ${statusText}
+                        <span class="${dayNumberClass} text-sm font-light group-hover:text-white transition-colors h-6 flex items-center justify-center">${day}</span>
+                        <div class="mt-2 flex flex-col items-center flex-1 justify-end pb-1 w-full text-center">
+                            ${statusText}
+                        </div>
+                        ${isSelected ? '' : `
+                        <div class="absolute inset-x-0 bottom-0 h-0.5 bg-gold-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center opacity-50"></div>
+                        `}
                     </div>`;
             }
 

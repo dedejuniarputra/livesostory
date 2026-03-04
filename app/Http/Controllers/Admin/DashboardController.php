@@ -15,13 +15,9 @@ class DashboardController extends Controller
     {
         $stats = [
             'total_bookings' => Booking::count(),
-            'pending_bookings' => Booking::where('status', 'pending')->count(),
-            'confirmed_bookings' => Booking::where('status', 'confirmed')->count(),
-            'completed_bookings' => Booking::where('status', 'completed')->count(),
-            'total_revenue' => Booking::whereIn('status', ['confirmed', 'completed'])->with('package')->get()->sum(fn($b) => $b->package->price),
+            'total_revenue' => Booking::with('package')->get()->sum(fn($b) => $b->package->price ?? 0),
             'total_packages' => Package::count(),
             'total_portfolios' => Portfolio::count(),
-            'unread_contacts' => Contact::unread()->count(),
         ];
 
         $recentBookings = Booking::with('package')->latest()->take(5)->get();

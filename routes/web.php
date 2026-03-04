@@ -7,6 +7,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PortfolioController;
 use App\Http\Controllers\Admin\PackageController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Admin\ScheduleController;
 use App\Http\Controllers\Admin\PaymentAccountController;
@@ -45,13 +46,19 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Portfolio Management
     Route::resource('portfolios', PortfolioController::class);
 
+    // Category Management
+    Route::resource('categories', CategoryController::class);
+    Route::delete('/categories/{category}/delete-image', [CategoryController::class, 'deleteImage'])->name('categories.delete-image');
+
     // Package Management
     Route::resource('packages', PackageController::class);
+    Route::delete('/packages/{package}/delete-image', [PackageController::class, 'deleteImage'])->name('packages.delete-image');
 
     // Booking Management
     Route::get('/bookings', [AdminBookingController::class, 'index'])->name('bookings.index');
+    Route::get('/bookings/export-all-pdf', [AdminBookingController::class, 'exportAllPdf'])->name('bookings.export-all-pdf');
     Route::get('/bookings/{booking}', [AdminBookingController::class, 'show'])->name('bookings.show');
-    Route::get('/bookings/{booking}/export-pdf', [AdminBookingController::class, 'exportPdf'])->name('bookings.export-pdf');
+
     Route::patch('/bookings/{booking}/status', [AdminBookingController::class, 'updateStatus'])->name('bookings.update-status');
     Route::delete('/bookings/all', [AdminBookingController::class, 'destroyAll'])->name('bookings.destroy-all');
     Route::delete('/bookings/{booking}', [AdminBookingController::class, 'destroy'])->name('bookings.destroy');

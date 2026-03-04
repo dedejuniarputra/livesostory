@@ -24,7 +24,7 @@ class BookingController extends Controller
             'email' => 'required|email|max:255',
             'phone' => 'required|numeric|digits_between:10,13',
             'address' => 'nullable|string',
-            'booking_date' => 'required|date|after:today',
+            'booking_date' => 'required|date|after_or_equal:today',
             'booking_time' => 'nullable|string',
             'location' => 'nullable|string|max:255',
             'notes' => 'nullable|string',
@@ -36,7 +36,6 @@ class BookingController extends Controller
 
         $maxSlots = $dateSetting ? $dateSetting->slots : $defaultSlots;
         $currentBookings = Booking::where('booking_date', $validated['booking_date'])
-            ->whereNotIn('status', ['cancelled'])
             ->count();
 
         if ($currentBookings >= $maxSlots) {
@@ -45,7 +44,7 @@ class BookingController extends Controller
         }
 
         $validated['package_id'] = $package->id;
-        $validated['status'] = 'pending';
+        $validated['status'] = 'completed';
 
         $booking = Booking::create($validated);
 
@@ -54,13 +53,6 @@ class BookingController extends Controller
 
     public function payment(Booking $booking)
     {
-        // Check if booking is expired (10 minutes)
-        if ($booking->status === 'pending' && $booking->created_at->addMinutes(10)->isPast()) {
-            $booking->update(['status' => 'cancelled']);
-            return redirect()->route('booking.create', $booking->package_id)
-                ->withErrors(['booking_date' => 'Waktu pembayaran telah habis. Silakan buat pesanan baru.']);
-        }
-
         $booking->load('package');
         $paymentAccounts = PaymentAccount::active()->get();
         $whatsappNumber = Setting::get('whatsapp_number', '6281234567890');
@@ -72,7 +64,7 @@ class BookingController extends Controller
     public function cancel(Booking $booking)
     {
         if ($booking->status === 'pending') {
-            $booking->update(['status' => 'cancelled']);
+            $booking->delete();
         }
 
         if (request()->wantsJson()) {
@@ -119,7 +111,6 @@ class BookingController extends Controller
 
         // Get booking counts per date
         $bookingCounts = Booking::whereBetween('booking_date', [$startDate, $endDate])
-            ->whereNotIn('status', ['cancelled'])
             ->selectRaw('booking_date, count(*) as total')
             ->groupBy('booking_date')
             ->get()

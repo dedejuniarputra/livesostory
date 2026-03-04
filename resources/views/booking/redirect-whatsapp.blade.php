@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>LIVESOSTORY.CO — Redirecting to WhatsApp</title>
-    <link rel="icon" type="image/jpeg" href="{{ asset('build/assets/ph.jpeg') }}">
+    <link rel="icon" type="image/jpeg" href="{{ asset('images/ph.jpeg') }}">
     <style>
         body {
             margin: 0;
@@ -60,24 +60,48 @@
     <div class="container">
         <div class="spinner"></div>
         <h1>MEMBUKA WHATSAPP</h1>
-        <p>Anda akan diarahkan kembali ke halaman utama...</p>
+        <p class="mb-8">Anda akan otomatis kembali ke Beranda setelah pesan terkirim.</p>
+        <a href="{{ route('home') }}"
+            class="text-[10px] tracking-[0.2em] uppercase text-gold-400/50 hover:text-gold-400 transition-colors border-b border-gold-400/20 pb-1">Klik
+            di sini jika tidak otomatis kembali</a>
     </div>
 
     <script>
         (function () {
-            // Open WhatsApp in new tab/window
             var waUrl = '{{ $waUrl }}';
-            var newWindow = window.open(waUrl, '_blank');
+            var redirected = false;
 
-            // Fallback if popup blocked - try to open in same window
-            if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
-                // Popup blocked, open in same window
-                window.location.replace(waUrl);
-            } else {
-                // Popup opened successfully, redirect current page to home
-                // Use replace() to prevent back button from returning to this page
-                window.location.replace('{{ route("home") }}');
+            function goToHome() {
+                if (!redirected) {
+                    redirected = true;
+                    window.location.replace('{{ route("home") }}');
+                }
             }
+
+            // Launch WhatsApp directly
+            setTimeout(function () {
+                window.location.href = waUrl;
+            }, 100);
+
+            // More aggressive detection: visibility, focus, and pageshow
+            window.addEventListener('focus', goToHome);
+            window.addEventListener('pageshow', goToHome);
+            document.addEventListener('visibilitychange', function () {
+                if (document.visibilityState === 'visible') {
+                    goToHome();
+                }
+            });
+
+            // Fast interval check for visibility (handles cases where events don't fire reliably)
+            var checkInterval = setInterval(function () {
+                if (document.visibilityState === 'visible') {
+                    goToHome();
+                    clearInterval(checkInterval);
+                }
+            }, 1000);
+
+            // Fallback for safety
+            setTimeout(goToHome, 10000);
         })();
     </script>
 </body>

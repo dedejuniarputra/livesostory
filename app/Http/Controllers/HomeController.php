@@ -13,22 +13,9 @@ class HomeController extends Controller
     public function index()
     {
         $portfolios = Portfolio::active()->ordered()->get();
-        $allPackages = Package::active()->ordered()->get();
 
-        // Group by category for the landing page horizontal scroll
-        $packageCategories = $allPackages->groupBy(function ($package) {
-            return $package->category ?: 'Uncategorized';
-        })->map(function ($packages, $category) {
-            // Try to find a package that has an image to use as cover
-            $packageWithImage = $packages->first(fn($p) => !empty($p->image));
-
-            return (object) [
-                'name' => $category,
-                'slug' => Str::slug($category),
-                'count' => $packages->count(),
-                'cover_image' => $packageWithImage ? $packageWithImage->image : null,
-            ];
-        });
+        // Fetch categories directly from the new Category model
+        $packageCategories = \App\Models\Category::active()->ordered()->withCount('packages')->get();
 
         $settings = [
             'hero_title' => Setting::get('hero_title', 'SOFT MOMENTS'),
@@ -44,27 +31,16 @@ class HomeController extends Controller
 
     public function showCategory($categorySlug)
     {
-        // Find packages matching this category slug
-        $allPackages = Package::active()->ordered()->get();
+        $category = \App\Models\Category::where('slug', $categorySlug)->firstOrFail();
 
-        $matchedCategory = null;
-        $packages = $allPackages->filter(function ($package) use ($categorySlug, &$matchedCategory) {
-            $category = $package->category ?: 'Uncategorized';
-            if (Str::slug($category) === $categorySlug) {
-                $matchedCategory = $category;
-                return true;
-            }
-            return false;
-        });
-
-        if ($packages->isEmpty()) {
-            abort(404);
-        }
+        // Find packages matching this category ID
+        $packages = Package::where('category_id', $category->id)->active()->ordered()->get();
+        $matchedCategory = $category->name;
 
         $settings = [
             'hero_image' => Setting::get('hero_image', ''),
         ];
 
-        return view('packages.category', compact('packages', 'matchedCategory', 'settings'));
+        return view('packages.category', compact('packages', 'matchedCategory', 'category', 'settings'));
     }
 }

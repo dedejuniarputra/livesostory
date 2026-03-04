@@ -11,6 +11,7 @@ class Package extends Model
 
     protected $fillable = [
         'name',
+        'category_id',
         'category',
         'image',
         'description',
@@ -32,6 +33,11 @@ class Package extends Model
         'is_featured' => 'boolean',
         'is_active' => 'boolean',
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 
     public function bookings()
     {

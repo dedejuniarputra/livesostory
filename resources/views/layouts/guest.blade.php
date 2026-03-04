@@ -16,7 +16,7 @@
         rel="stylesheet">
 
     <!-- Scripts -->
-    <link rel="icon" type="image/jpeg" href="{{ asset('build/assets/ph.jpeg') }}">
+    <link rel="icon" type="image/jpeg" href="{{ asset('images/ph.jpeg') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
