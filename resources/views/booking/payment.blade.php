@@ -58,8 +58,10 @@
                     <div>
                         <h3 class="text-lg font-display text-gold-400 tracking-wide mb-1">Informasi Penting</h3>
                         <p class="text-sm text-gray-400 leading-relaxed">
-                            Mohon lakukan transfer sesuai dengan paket <b>{{ $booking->package->name }}</b>
-                            ({{ $booking->package->formatted_price }}) secara tepat.
+                            Mohon lakukan transfer sesuai dengan metode
+                            <b>{{ $booking->payment_type === 'dp' ? 'DP' : 'Lunas' }}</b> pada paket
+                            <b>{{ $booking->package->name }}</b>
+                            (Rp {{ number_format($booking->amount_to_pay, 0, ',', '.') }}) secara tepat.
                         </p>
                     </div>
                 </div>
@@ -95,43 +97,58 @@
 
         <!-- Booking Summary -->
         <div class="bg-dark-800/50 border border-dark-700 p-6 mb-8">
-            <h2 class="text-xs tracking-widest uppercase text-gold-400 mb-4">Ringkasan Booking</h2>
-            <div class="space-y-3">
-                <div class="flex justify-between text-sm">
-                    <span class="text-gray-400">Nama</span>
-                    <span>{{ $booking->name }}</span>
+            <h2 class="text-[10px] md:text-xs tracking-widest uppercase text-gold-400 mb-6 font-semibold">Ringkasan
+                Booking</h2>
+            <div class="space-y-4">
+                <div class="flex justify-between items-start gap-4 text-[11px] md:text-sm">
+                    <span class="text-gray-500 shrink-0">Nama Anda</span>
+                    <span class="text-right font-medium text-gray-200">{{ $booking->name }}</span>
                 </div>
-                <div class="flex justify-between text-sm">
-                    <span class="text-gray-400">Paket</span>
-                    <span>{{ $booking->package->name }}</span>
+                <div class="flex justify-between items-start gap-4 text-[11px] md:text-sm">
+                    <span class="text-gray-500 shrink-0">Nama IG / Link IG</span>
+                    <span class="text-right font-medium text-gray-300">{{ $booking->ig_username ?? '-' }}</span>
                 </div>
-                <div class="flex justify-between text-sm">
-                    <span class="text-gray-400">Tanggal</span>
-                    <span>{{ $booking->booking_date->format('d F Y') }}</span>
+                <div class="flex justify-between items-start gap-4 text-[11px] md:text-sm">
+                    <span class="text-gray-500 shrink-0">No Telfon Anda</span>
+                    <span class="text-right font-medium text-gray-200">{{ $booking->phone }}</span>
+                </div>
+                <div class="flex justify-between items-start gap-4 text-[11px] md:text-sm">
+                    <span class="text-gray-500 shrink-0">Paket</span>
+                    <span class="text-right font-medium text-gray-200">{{ $booking->package->name }}</span>
+                </div>
+                <div class="flex justify-between items-start gap-4 text-[11px] md:text-sm">
+                    <span class="text-gray-500 shrink-0">Tanggal</span>
+                    <span
+                        class="text-right font-medium text-gray-200">{{ $booking->booking_date->format('d F Y') }}</span>
+                </div>
+                <div class="flex justify-between items-start gap-4 text-[11px] md:text-sm">
+                    <span class="text-gray-500 shrink-0">Jam</span>
+                    <span class="text-right font-medium text-gray-200">{{ $booking->booking_time ?? '-' }}</span>
+                </div>
+                <div class="flex justify-between items-start gap-4 text-[11px] md:text-sm">
+                    <span class="text-gray-500 shrink-0">Metode Bayar</span>
+                    <span
+                        class="text-right font-bold text-gold-400 uppercase tracking-tight">{{ $booking->payment_type === 'dp' ? 'DP (DOWN PAYMENT)' : 'Lunas (PELUNASAN)' }}</span>
                 </div>
 
                 @if($booking->location)
-                    <div class="flex justify-between text-sm">
-                        <span class="text-gray-400">Lokasi</span>
-                        <span>{{ $booking->location }}</span>
-                    </div>
-                @endif
-                @if($booking->location_link)
-                    <div class="flex justify-between text-sm">
-                        <span class="text-gray-400">Link Lokasi</span>
-                        <a href="{{ $booking->location_link }}" target="_blank"
-                            class="text-gold-400 hover:text-gold-300 transition-colors underline">Buka Maps</a>
+                    <div class="flex justify-between items-start gap-4 text-[11px] md:text-sm">
+                        <span class="text-gray-500 shrink-0">Alamat/Serlok Anda</span>
+                        <span class="text-right break-words max-w-[60%] text-gray-200">{{ $booking->location }}</span>
                     </div>
                 @endif
                 @if($booking->notes)
-                    <div class="flex justify-between text-sm">
-                        <span class="text-gray-400">Catatan</span>
-                        <span class="text-right max-w-[200px]">{{ $booking->notes }}</span>
+                    <div class="flex justify-between items-start gap-4 text-[11px] md:text-sm">
+                        <span class="text-gray-500 shrink-0">Catatan</span>
+                        <span class="text-right break-words max-w-[60%] text-gray-200">{{ $booking->notes }}</span>
                     </div>
                 @endif
-                <div class="border-t border-dark-700 pt-3 flex justify-between">
-                    <span class="text-sm text-gray-400">Total Pembayaran</span>
-                    <span class="text-xl font-light text-gold-400">{{ $booking->package->formatted_price }}</span>
+                <div class="border-t border-dark-700 pt-6 mt-4 flex justify-between items-center">
+                    <span class="text-[11px] md:text-sm font-medium text-gray-500 uppercase tracking-wider">Total
+                        Pembayaran
+                        ({{ strtoupper($booking->payment_type) }})</span>
+                    <span class="text-2xl md:text-3xl font-light text-gold-400 tabular-nums">Rp
+                        {{ number_format($booking->amount_to_pay, 0, ',', '.') }}</span>
                 </div>
             </div>
         </div>
@@ -143,16 +160,19 @@
             @if($paymentAccounts->count() > 0)
                 <div class="space-y-4">
                     @foreach($paymentAccounts as $account)
-                        <div class="border border-dark-600 p-4 hover:border-gold-400/30 transition-colors">
+                        <div class="border border-dark-600 p-5 hover:border-gold-400/30 transition-colors group">
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-sm font-medium text-white">{{ $account->bank_name }}</span>
+                                <span
+                                    class="text-[11px] md:text-sm font-semibold text-gold-400 uppercase tracking-widest">{{ $account->bank_name }}</span>
                                 <button type="button" onclick="copyToClipboard('{{ $account->account_number }}')"
-                                    class="text-xs text-gold-400 hover:text-gold-300 transition-colors">
+                                    class="text-[10px] md:text-xs text-gray-500 hover:text-gold-400 transition-colors uppercase font-bold tracking-widest">
                                     Copy
                                 </button>
                             </div>
-                            <p class="text-lg font-mono text-white tracking-wider">{{ $account->account_number }}</p>
-                            <p class="text-xs text-gray-500 mt-1">a.n. {{ $account->account_holder }}</p>
+                            <p class="text-xl md:text-2xl font-mono text-white tracking-widest font-bold mb-1">
+                                {{ $account->account_number }}</p>
+                            <p class="text-[10px] md:text-xs text-gray-500 uppercase tracking-wider font-medium">a.n.
+                                {{ $account->account_holder }}</p>
                         </div>
                     @endforeach
                 </div>
@@ -162,30 +182,47 @@
         </div>
 
         <!-- Important Notes -->
-        <div class="bg-yellow-500/5 border border-yellow-500/20 p-6 mb-8">
-            <h3 class="text-xs tracking-widest uppercase text-yellow-400 mb-3">Catatan Penting</h3>
-            <ul class="space-y-2 text-sm text-gray-400">
-                @if($paymentInstructions)
+        <div class="bg-gold-400/5 border border-gold-400/20 p-8 mb-8">
+            <h3 class="text-xs tracking-widest uppercase text-gold-400 mb-6 font-semibold">Petunjuk Pembayaran</h3>
+            <ul class="space-y-4">
+                @if($paymentInstructions && trim($paymentInstructions) != '')
                     @foreach(explode("\n", $paymentInstructions) as $line)
                         @if(trim($line))
-                            <li class="flex items-start">
-                                <span class="text-yellow-400 mr-2">•</span>
-                                {!! nl2br(e(ltrim(trim($line), '• '))) !!}
+                            <li class="flex items-start gap-3">
+                                <div
+                                    class="w-1.5 h-1.5 bg-gold-400 rounded-full mt-1.5 flex-shrink-0 shadow-[0_0_8px_rgba(251,191,36,0.6)]">
+                                </div>
+                                <p class="text-xs text-gray-400 leading-relaxed">
+                                    {!! nl2br(e(ltrim(trim($line), '• '))) !!}
+                                </p>
                             </li>
                         @endif
                     @endforeach
                 @else
-                    <li class="flex items-start">
-                        <span class="text-yellow-400 mr-2">•</span>
-                        Transfer sesuai <b>Nominal Paket</b> yang tertera (Tanpa pembulatan)
+                    <li class="flex items-start gap-3">
+                        <div
+                            class="w-1.5 h-1.5 bg-gold-400 rounded-full mt-1.5 flex-shrink-0 shadow-[0_0_8px_rgba(251,191,36,0.6)]">
+                        </div>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            Transfer sesuai dengan <strong>Nominal Paket</strong> yang tertera tanpa pembulatan.
+                        </p>
                     </li>
-                    <li class="flex items-start">
-                        <span class="text-yellow-400 mr-2">•</span>
-                        Setelah transfer, klik tombol di bawah untuk <b>Kirim Bukti Pembayaran</b> via WhatsApp
+                    <li class="flex items-start gap-3">
+                        <div
+                            class="w-1.5 h-1.5 bg-gold-400 rounded-full mt-1.5 flex-shrink-0 shadow-[0_0_8px_rgba(251,191,36,0.6)]">
+                        </div>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            Setelah transfer berhasil, klik tombol <strong>Kirim Bukti & Konfirmasi</strong> di bawah ini.
+                        </p>
                     </li>
-                    <li class="flex items-start">
-                        <span class="text-yellow-400 mr-2">•</span>
-                        Booking akan dikonfirmasi oleh team kami dalam 1x24 jam setelah bukti diterima
+                    <li class="flex items-start gap-3">
+                        <div
+                            class="w-1.5 h-1.5 bg-gold-400 rounded-full mt-1.5 flex-shrink-0 shadow-[0_0_8px_rgba(251,191,36,0.6)]">
+                        </div>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            Booking akan dikonfirmasi oleh tim kami dalam waktu maksimal <strong>1 x 24 Jam</strong> setelah
+                            bukti diterima.
+                        </p>
                     </li>
                 @endif
             </ul>

@@ -46,7 +46,7 @@
         <!-- Content -->
         <div class="relative z-10 text-center px-6 max-w-4xl mx-auto">
             <h1
-                class="font-display text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-light tracking-ultra-wide mb-6 animate-fade-in text-gold-gradient">
+                class="font-display text-4xl sm:text-7xl md:text-8xl lg:text-9xl font-light tracking-tight sm:tracking-ultra-wide mb-6 animate-fade-in text-gold-gradient leading-tight">
                 {{ $settings['hero_title'] }}
             </h1>
             <p
@@ -54,11 +54,11 @@
                 {{ $settings['hero_subtitle'] }}
             </p>
 
-            <div class="flex flex-col sm:flex-row gap-6 justify-center animate-fade-in-delay-3 mt-20">
-                <a href="#packages" class="btn-gold">
+            <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center animate-fade-in-delay-3 mt-12 md:mt-20 px-4 sm:px-0">
+                <a href="#packages" class="btn-gold w-full sm:w-auto">
                     Book A Session
                 </a>
-                <a href="#portfolio" class="btn-outline">
+                <a href="#portfolio" class="btn-outline w-full sm:w-auto">
                     View Portfolio
                 </a>
             </div>
@@ -78,9 +78,9 @@
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <!-- Section Header -->
             <div class="text-center mb-16">
-                <p class="text-gold-400 text-xs tracking-widest uppercase mb-3">Booking</p>
-                <h2 class="font-display text-4xl md:text-5xl font-light tracking-wide">Packages</h2>
-                <div class="w-16 h-px bg-gold-400 mx-auto mt-6"></div>
+                <p class="text-gold-400 text-[10px] md:text-xs tracking-widest uppercase mb-3">Booking</p>
+                <h2 class="font-display text-3xl md:text-5xl font-light tracking-wide">Packages</h2>
+                <div class="w-12 md:w-16 h-px bg-gold-400 mx-auto mt-4 md:mt-6"></div>
             </div>
 
             @if($packageCategories->count() > 0)

@@ -12,7 +12,15 @@ class BookingController extends Controller
     public function index(Request $request)
     {
         $query = Booking::with('package')->latest();
+        $this->applyFilters($query, $request);
 
+        $totalOmset = (clone $query)->sum('amount_to_pay');
+        $bookings = $query->paginate(15);
+        return view('admin.bookings.index', compact('bookings', 'totalOmset'));
+    }
+
+    protected function applyFilters($query, Request $request)
+    {
         if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->search . '%');
         }
@@ -21,8 +29,14 @@ class BookingController extends Controller
             $query->whereDate('booking_date', $request->date);
         }
 
-        $bookings = $query->paginate(15);
-        return view('admin.bookings.index', compact('bookings'));
+        if ($request->filled('month')) {
+            // month format is YYYY-MM
+            [$year, $month] = explode('-', $request->month);
+            $query->whereYear('booking_date', $year)
+                ->whereMonth('booking_date', $month);
+        }
+
+        return $query;
     }
 
     public function show(Booking $booking)
@@ -43,15 +57,15 @@ class BookingController extends Controller
         return redirect()->route('admin.bookings.index')->with('success', 'Semua booking berhasil dihapus!');
     }
 
-
-
-    public function exportAllPdf()
+    public function exportAllPdf(Request $request)
     {
-        $bookings = Booking::with('package')
+        $query = Booking::with('package')
             ->where('status', 'completed')
-            ->latest()
-            ->get();
+            ->latest();
 
+        $this->applyFilters($query, $request);
+
+        $bookings = $query->get();
         $status = 'completed';
 
         $pdf = Pdf::loadView('admin.bookings.export-all-pdf', compact('bookings', 'status'));

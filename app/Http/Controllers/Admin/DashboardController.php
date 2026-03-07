@@ -15,7 +15,7 @@ class DashboardController extends Controller
     {
         $stats = [
             'total_bookings' => Booking::count(),
-            'total_revenue' => Booking::with('package')->get()->sum(fn($b) => $b->package->price ?? 0),
+            'total_revenue' => Booking::sum('amount_to_pay'),
             'total_packages' => Package::count(),
             'total_portfolios' => Portfolio::count(),
         ];

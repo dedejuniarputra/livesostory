@@ -46,6 +46,11 @@
                     class="w-full bg-dark-800/50 border border-dark-700 text-white text-sm px-4 py-3 focus:border-gold-400 focus:ring-0 rounded">
             </div>
             <div>
+                <label class="block text-xs tracking-widest uppercase text-gray-400 mb-2">Harga DP (Rp) *</label>
+                <input type="number" name="down_payment" value="{{ old('down_payment', $package->down_payment) }}" required
+                    class="w-full bg-dark-800/50 border border-dark-700 text-white text-sm px-4 py-3 focus:border-gold-400 focus:ring-0 rounded">
+            </div>
+            <div>
                 <label class="block text-xs tracking-widest uppercase text-gray-400 mb-2">Fitur (satu per baris)</label>
                 <textarea name="features" rows="5"
                     class="w-full bg-dark-800/50 border border-dark-700 text-white text-sm px-4 py-3 focus:border-gold-400 focus:ring-0 rounded resize-none">{{ old('features', is_array($package->features) ? implode("\n", $package->features) : $package->features) }}</textarea>

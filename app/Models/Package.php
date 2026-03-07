@@ -16,6 +16,7 @@ class Package extends Model
         'image',
         'description',
         'price',
+        'down_payment',
         'features',
         'items_included',
         'item_images',
@@ -57,5 +58,10 @@ class Package extends Model
     public function getFormattedPriceAttribute()
     {
         return 'Rp ' . number_format((float) $this->price, 0, ',', '.');
+    }
+
+    public function getFormattedDownPaymentAttribute()
+    {
+        return 'Rp ' . number_format((float) $this->down_payment, 0, ',', '.');
     }
 }

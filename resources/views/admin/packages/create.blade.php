@@ -48,6 +48,12 @@
                 @error('price') <span class="text-red-400 text-xs mt-1">{{ $message }}</span> @enderror
             </div>
             <div>
+                <label class="block text-xs tracking-widest uppercase text-gray-400 mb-2">Harga DP (Rp) *</label>
+                <input type="number" name="down_payment" value="{{ old('down_payment', 0) }}" required
+                    class="w-full bg-dark-800/50 border border-dark-700 text-white text-sm px-4 py-3 focus:border-gold-400 focus:ring-0 rounded">
+                @error('down_payment') <span class="text-red-400 text-xs mt-1">{{ $message }}</span> @enderror
+            </div>
+            <div>
                 <label class="block text-xs tracking-widest uppercase text-gray-400 mb-2">Fitur (satu per baris)</label>
                 <textarea name="features" rows="5"
                     placeholder="1 Hour Photo Session&#10;30 Edited Photos&#10;Online Gallery"

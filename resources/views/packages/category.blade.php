@@ -45,11 +45,14 @@
                 <div class="w-full h-full bg-gradient-to-br from-dark-800 via-dark-900 to-dark-950"></div>
             @endif
             <div class="absolute inset-0 bg-black/60"></div>
-            <div class="absolute inset-0 flex flex-col items-center justify-center">
-                <p class="text-gold-400 text-xs tracking-widest uppercase mb-3">Package Collection</p>
-                <h1 class="font-display text-4xl md:text-6xl font-light tracking-wide text-white">{{ $matchedCategory }}
+            <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
+                <p class="text-gold-400 text-[10px] md:text-xs tracking-widest uppercase mb-2 md:mb-3">Package
+                    Collection</p>
+                <h1
+                    class="font-display text-3xl sm:text-4xl md:text-6xl font-light tracking-wide text-white leading-tight">
+                    {{ $matchedCategory }}
                 </h1>
-                <div class="w-16 h-px bg-gold-400 mt-6"></div>
+                <div class="w-12 md:w-16 h-px bg-gold-400 mt-4 md:mt-6"></div>
                 <p class="text-gray-400 text-sm mt-4 tracking-wide">{{ $packages->count() }}
                     {{ $packages->count() > 1 ? 'Packages Available' : 'Package Available' }}
                 </p>
@@ -71,9 +74,9 @@
                                 style="animation-delay: {{ $loop->index * 0.15 }}s; opacity: 0;">
 
                                 <!-- Package Content -->
-                                <div class="p-8 md:p-10 flex-grow flex flex-col">
+                                <div class="p-6 md:p-10 flex-grow flex flex-col">
                                     <h2
-                                        class="font-display text-2xl md:text-3xl font-light tracking-wide mb-3 text-gold-200 group-hover:text-white transition-colors duration-500">
+                                        class="font-display text-xl md:text-3xl font-light tracking-wide mb-3 text-gold-200 group-hover:text-white transition-colors duration-500">
                                         {{ $package->name }}
                                     </h2>
                                     <p
@@ -101,7 +104,7 @@
                                     <div class="mt-auto pt-6 border-t border-dark-800/50">
                                         <div class="mb-6">
                                             <span
-                                                class="text-3xl font-light text-white tracking-tight">{{ $package->formatted_price }}</span>
+                                                class="text-2xl md:text-3xl font-light text-white tracking-tight">{{ $package->formatted_price }}</span>
                                         </div>
                                         <a href="{{ route('booking.create', $package) }}"
                                             class="inline-block text-center w-full btn-gold px-8 py-4 text-xs font-semibold tracking-widest uppercase transform transition-all duration-500 hover:bg-gold-300 hover:shadow-[0_0_20px_rgba(212,175,55,0.3)]">

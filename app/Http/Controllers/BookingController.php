@@ -21,12 +21,12 @@ class BookingController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
+            'ig_username' => 'required|string|max:255',
             'phone' => 'required|numeric|digits_between:10,13',
-            'address' => 'nullable|string',
             'booking_date' => 'required|date|after_or_equal:today',
-            'booking_time' => 'nullable|string',
-            'location' => 'nullable|string|max:255',
+            'booking_time' => 'required|string',
+            'payment_type' => 'required|in:lunas,dp',
+            'location' => 'required|string|max:255',
             'notes' => 'nullable|string',
         ]);
 
@@ -45,6 +45,7 @@ class BookingController extends Controller
 
         $validated['package_id'] = $package->id;
         $validated['status'] = 'completed';
+        $validated['amount_to_pay'] = $validated['payment_type'] === 'dp' ? $package->down_payment : $package->price;
 
         $booking = Booking::create($validated);
 
@@ -63,6 +64,9 @@ class BookingController extends Controller
 
     public function cancel(Booking $booking)
     {
+        $packageId = $booking->package_id;
+        $bookingData = $booking->only(['name', 'ig_username', 'phone', 'location', 'notes', 'booking_time', 'payment_type']);
+
         if ($booking->status === 'pending') {
             $booking->delete();
         }
@@ -71,23 +75,43 @@ class BookingController extends Controller
             return response()->json(['status' => 'success']);
         }
 
-        return redirect()->route('booking.create', $booking->package_id)
+        return redirect()->route('booking.create', $packageId)
+            ->withInput($bookingData)
             ->with('info', 'Pesanan sebelumnya telah dibatalkan. Silakan pilih jadwal baru.');
     }
 
     public function confirm(Request $request, Booking $booking)
     {
+        $packagePrice = 'Rp ' . number_format((float) $booking->package->price, 0, ',', '.');
+        $paymentTotal = 'Rp ' . number_format((float) $booking->amount_to_pay, 0, ',', '.');
+        $paymentTypeBase = $booking->payment_type === 'dp' ? 'DP' : 'LUNAS';
+        $paymentTypeLabel = "{$paymentTypeBase} ({$paymentTotal})";
+        $paymentTotalLabel = $booking->payment_type === 'dp' ? 'Total yang dibayar(DP)' : 'Total yang dibayar(Lunas)';
+
+        $message = "Halo admin livesostory.co, saya ingin konfirmasi pembayaran untuk booking:\n\n"
+            . "*Nama*: {$booking->name}\n"
+            . "*Nama Instagram* : {$booking->ig_username}\n"
+            . "*No Telpon* : {$booking->phone}\n"
+            . "*Alamat/Serlok Saya*: {$booking->location}\n"
+            . "*Tanggal* : {$booking->booking_date->format('d M Y')}\n"
+            . "*Jam Acara* : {$booking->booking_time}\n"
+            . "*Paket* : {$booking->package->name}\n"
+            . "*Pembayaran* : {$paymentTypeLabel}\n"
+            . "----------------------------------\n"
+            . "Harga Package: {$packagePrice}\n"
+            . "{$paymentTotalLabel}: {$paymentTotal}\n"
+            . "-------------------------\n\n"
+            . "Berikut bukti pembayarannya.";
+
         $whatsappNumber = Setting::get('whatsapp_number', '6281234567890');
 
-        $message = "Halo, saya ingin konfirmasi pembayaran untuk booking:\n\n"
-            . "Nama: {$booking->name}\n"
-            . "Paket: {$booking->package->name}\n"
-            . "Tanggal: {$booking->booking_date->format('d M Y')}\n"
-            . "Lokasi: {$booking->location}\n"
-            . ($booking->notes ? "Catatan: {$booking->notes}\n" : "")
-            . "Total: {$booking->package->formatted_price}\n\n"
-            . "Berikut bukti pembayarannya.\n\n"
-            . "Terima kasih!";
+        // Clean the number: remove any non-numeric characters (spaces, +, -, etc)
+        $whatsappNumber = preg_replace('/[^0-9]/', '', $whatsappNumber);
+
+        // If it starts with '0', replace with '62' (for Indonesian format)
+        if (str_starts_with($whatsappNumber, '0')) {
+            $whatsappNumber = '62' . substr($whatsappNumber, 1);
+        }
 
         $waUrl = "https://wa.me/{$whatsappNumber}?text=" . urlencode($message);
 

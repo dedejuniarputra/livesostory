@@ -74,33 +74,45 @@
             function goToHome() {
                 if (!redirected) {
                     redirected = true;
-                    window.location.replace('{{ route("home") }}');
+                    // Use a slight delay to ensure the browser handles the location change smoothly
+                    setTimeout(function () {
+                        window.location.replace('{{ route("home") }}');
+                    }, 500);
                 }
             }
 
-            // Launch WhatsApp directly
-            setTimeout(function () {
-                window.location.href = waUrl;
-            }, 100);
+            // 1. Launch WhatsApp immediately
+            window.location.href = waUrl;
 
-            // More aggressive detection: visibility, focus, and pageshow
-            window.addEventListener('focus', goToHome);
-            window.addEventListener('pageshow', goToHome);
-            document.addEventListener('visibilitychange', function () {
-                if (document.visibilityState === 'visible') {
-                    goToHome();
-                }
+            // 2. Arm the "Return home" listeners AFTER a delay
+            // This prevents the focus/visibility events from firing prematurely
+            // while the protocol handler (WhatsApp) is still launching.
+            setTimeout(function() {
+                // Detect when the window regains focus (means they came back from WA)
+                window.addEventListener('focus', goToHome);
+
+                // Detect visibility change (more reliable on some mobile browsers)
+                document.addEventListener('visibilitychange', function () {
+                    if (document.visibilityState === 'visible') {
+                        goToHome();
+                    }
+                });
+
+                // Detect pageshow (back button)
+                window.addEventListener('pageshow', function (event) {
+                    if (event.persisted) {
+                        goToHome();
+                    }
+                });
+            }, 2000);
+
+            // 3. Fallback: If user clicks the manual link
+            document.querySelector('a').addEventListener('click', function () {
+                redirected = true;
             });
 
-            // Fast interval check for visibility (handles cases where events don't fire reliably)
-            var checkInterval = setInterval(function () {
-                if (document.visibilityState === 'visible') {
-                    goToHome();
-                    clearInterval(checkInterval);
-                }
-            }, 1000);
-
-            // Fallback for safety
+            // 4. Safety Timeout: If they stay on this page for too long
+            // Increased to 10 seconds
             setTimeout(goToHome, 10000);
         })();
     </script>

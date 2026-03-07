@@ -32,51 +32,55 @@
 
     <!-- Accounts List -->
     <div class="bg-dark-800/50 border border-dark-700 rounded overflow-hidden">
-        <table class="w-full">
-            <thead>
-                <tr class="text-xs text-gray-500 uppercase tracking-wider border-b border-dark-700">
-                    <th class="text-left px-6 py-3">Bank</th>
-                    <th class="text-left px-6 py-3">No. Rekening</th>
-                    <th class="text-left px-6 py-3">Atas Nama</th>
-                    <th class="text-left px-6 py-3">Status</th>
-                    <th class="text-left px-6 py-3">Aksi</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-dark-800">
-                @forelse($accounts as $account)
-                    <tr class="hover:bg-dark-800/30 transition-colors">
-                        <td class="px-6 py-3 text-sm">{{ $account->bank_name }}</td>
-                        <td class="px-6 py-3 text-sm font-mono">{{ $account->account_number }}</td>
-                        <td class="px-6 py-3 text-sm text-gray-400">{{ $account->account_holder }}</td>
-                        <td class="px-6 py-3">
-                            @if($account->is_active)
-                                <span class="px-2 py-1 text-xs rounded-full bg-green-500/20 text-green-400">Active</span>
-                            @else
-                                <span class="px-2 py-1 text-xs rounded-full bg-gray-500/20 text-gray-400">Inactive</span>
-                            @endif
-                        </td>
-                        <td class="px-6 py-3 flex items-center gap-2">
-                            <a href="{{ route('admin.payment-accounts.edit', $account) }}"
-                                class="px-3 py-1 text-[10px] uppercase tracking-wider border border-gold-400/30 text-gold-400/80 hover:bg-gold-400/10 hover:text-gold-400 transition-all rounded">
-                                Edit
-                            </a>
-                            <form action="{{ route('admin.payment-accounts.destroy', $account) }}" method="POST"
-                                onsubmit="return confirm('Hapus rekening ini?')" class="inline">
-                                @csrf @method('DELETE')
-                                <button
-                                    class="px-3 py-1 text-[10px] uppercase tracking-wider border border-red-500/30 text-red-500/70 hover:bg-red-500/10 hover:text-red-400 transition-all rounded">
-                                    Hapus
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="5" class="px-6 py-8 text-center text-gray-500 text-sm">Belum ada rekening.</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+        <div class="w-full overflow-x-auto scrollbar-thin scrollbar-thumb-dark-700 -mx-px">
+            <div class="inline-block min-w-full align-middle">
+                <table class="w-full min-w-[700px]">
+                    <thead>
+                        <tr class="text-xs text-gray-500 uppercase tracking-wider border-b border-dark-700">
+                            <th class="text-left px-6 py-3">Bank</th>
+                            <th class="text-left px-6 py-3">No. Rekening</th>
+                            <th class="text-left px-6 py-3">Atas Nama</th>
+                            <th class="text-left px-6 py-3">Status</th>
+                            <th class="text-left px-6 py-3">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-dark-800">
+                        @forelse($accounts as $account)
+                            <tr class="hover:bg-dark-800/30 transition-colors">
+                                <td class="px-6 py-3 text-sm">{{ $account->bank_name }}</td>
+                                <td class="px-6 py-3 text-sm font-mono">{{ $account->account_number }}</td>
+                                <td class="px-6 py-3 text-sm text-gray-400">{{ $account->account_holder }}</td>
+                                <td class="px-6 py-3">
+                                    @if($account->is_active)
+                                        <span class="px-2 py-1 text-xs rounded-full bg-green-500/20 text-green-400">Active</span>
+                                    @else
+                                        <span class="px-2 py-1 text-xs rounded-full bg-gray-500/20 text-gray-400">Inactive</span>
+                                    @endif
+                                </td>
+                                <td class="px-6 py-3 flex items-center gap-2">
+                                    <a href="{{ route('admin.payment-accounts.edit', $account) }}"
+                                        class="px-3 py-1 text-[10px] uppercase tracking-wider border border-gold-400/30 text-gold-400/80 hover:bg-gold-400/10 hover:text-gold-400 transition-all rounded">
+                                        Edit
+                                    </a>
+                                    <form action="{{ route('admin.payment-accounts.destroy', $account) }}" method="POST"
+                                        onsubmit="return confirm('Hapus rekening ini?')" class="inline">
+                                        @csrf @method('DELETE')
+                                        <button
+                                            class="px-3 py-1 text-[10px] uppercase tracking-wider border border-red-500/30 text-red-500/70 hover:bg-red-500/10 hover:text-red-400 transition-all rounded">
+                                            Hapus
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="px-6 py-8 text-center text-gray-500 text-sm">Belum ada rekening.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
 @endsection

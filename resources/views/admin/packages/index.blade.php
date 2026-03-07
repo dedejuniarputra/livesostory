@@ -10,13 +10,16 @@
     </div>
 
     <div class="bg-dark-800/50 border border-dark-700 rounded overflow-hidden">
-        <table class="w-full">
+        <div class="w-full overflow-x-auto scrollbar-thin scrollbar-thumb-dark-700 -mx-px">
+            <div class="inline-block min-w-full align-middle">
+                <table class="min-w-[800px] w-full">
             <thead>
                 <tr class="text-xs text-gray-500 uppercase tracking-wider border-b border-dark-700">
                     <th class="text-left px-6 py-3">#</th>
                     <th class="text-left px-6 py-3">Nama Paket</th>
                     <th class="text-left px-6 py-3">Kategori</th>
                     <th class="text-left px-6 py-3">Harga</th>
+                    <th class="text-left px-6 py-3">DP</th>
                     <th class="text-left px-6 py-3">Status</th>
                     <th class="text-left px-6 py-3">Aksi</th>
                 </tr>
@@ -30,6 +33,7 @@
                         </td>
                         <td class="px-6 py-3 text-sm text-gray-400">{{ $package->category ?? '-' }}</td>
                         <td class="px-6 py-3 text-sm">{{ $package->formatted_price }}</td>
+                        <td class="px-6 py-3 text-sm text-gold-400 font-medium">{{ $package->formatted_down_payment }}</td>
                         <td class="px-6 py-3">
                             @if($package->is_active)
                                 <span class="px-2 py-1 text-xs rounded-full bg-green-500/20 text-green-400">Active</span>
@@ -56,7 +60,9 @@
                     </tr>
                 @endforelse
             </tbody>
-        </table>
+                </table>
+            </div>
+        </div>
     </div>
 
 @endsection

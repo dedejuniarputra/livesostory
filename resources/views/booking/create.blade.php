@@ -69,33 +69,86 @@
 
                     <div class="grid md:grid-cols-2 gap-6">
                         <div>
-                            <label class="block text-xs tracking-widest uppercase text-gray-400 mb-2">Nama Lengkap
+                            <label class="block text-xs tracking-widest uppercase text-gray-400 mb-2">Nama
                                 *</label>
                             <input type="text" name="name" value="{{ old('name') }}" required
                                 placeholder="Contoh: Budi Santoso"
                                 class="w-full bg-dark-800/50 border border-dark-700 text-white text-sm px-5 py-3.5 focus:border-gold-400 focus:ring-0 transition-colors">
                         </div>
                         <div>
-                            <label class="block text-xs tracking-widest uppercase text-gray-400 mb-2">Email *</label>
-                            <input type="email" name="email" value="{{ old('email') }}" required
-                                placeholder="Contoh: budi@gmail.com"
+                            <label class="block text-xs tracking-widest uppercase text-gray-400 mb-2">Nama IG / Link IG
+                                anda *</label>
+                            <input type="text" name="ig_username" value="{{ old('ig_username') }}" required
+                                placeholder="Contoh: @budi_santoso atau instagram.com/budi_santoso"
                                 class="w-full bg-dark-800/50 border border-dark-700 text-white text-sm px-5 py-3.5 focus:border-gold-400 focus:ring-0 transition-colors">
                         </div>
                     </div>
 
-                    <div>
-                        <label class="block text-xs tracking-widest uppercase text-gray-400 mb-2">No. Telepon *</label>
-                        <input type="tel" name="phone" value="{{ old('phone') }}" required maxlength="13"
-                            oninput="this.value = this.value.replace(/[^0-9]/g, '')" placeholder="Contoh: 081234567890"
-                            class="w-full bg-dark-800/50 border border-dark-700 text-white text-sm px-5 py-3.5 focus:border-gold-400 focus:ring-0 transition-colors">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-xs tracking-widest uppercase text-gray-400 mb-2">NO TELPON
+                                *</label>
+                            <input type="tel" name="phone" value="{{ old('phone') }}" required maxlength="13"
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                placeholder="Contoh: 081234567890"
+                                class="w-full bg-dark-800/50 border border-dark-700 text-white text-sm px-5 py-3.5 focus:border-gold-400 focus:ring-0 transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-xs tracking-widest uppercase text-gray-400 mb-2">JAM ACARA ANDA
+                                *</label>
+                            <input type="time" name="booking_time" value="{{ old('booking_time') }}" required
+                                class="w-full bg-dark-800/50 border border-dark-700 text-white text-sm px-5 py-3.5 focus:border-gold-400 focus:ring-0 transition-colors [color-scheme:dark]">
+                        </div>
                     </div>
 
-                    <!-- Location -->
+                    <!-- Location / Alamat -->
                     <div>
-                        <label class="block text-xs tracking-widest uppercase text-gray-400 mb-2">Lokasi /
-                            Alamat</label>
+                        <label class="block text-xs tracking-widest uppercase text-gray-400 mb-2">ALAMAT/SERLOK ANDA
+                            *</label>
                         <textarea name="location" rows="3" placeholder="Contoh: Taman Kota Bandung, Jl. Merdeka No. 123"
+                            required
                             class="w-full bg-dark-800/50 border border-dark-700 text-white text-sm px-5 py-3.5 focus:border-gold-400 focus:ring-0 transition-colors resize-none placeholder-gray-600">{{ old('location') }}</textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] md:text-xs tracking-widest uppercase text-gray-400 mb-2">Metode
+                            Pembayaran
+                            *</label>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                            <label
+                                class="relative flex flex-col p-4 md:p-6 bg-dark-800/50 border border-dark-700 cursor-pointer hover:border-gold-400 transition-colors group">
+                                <input type="radio" name="payment_type" value="lunas" {{ old('payment_type', 'lunas') === 'lunas' ? 'checked' : '' }} class="sr-only peer">
+                                <div
+                                    class="absolute top-4 md:top-6 right-4 md:right-6 w-5 h-5 border-2 border-dark-600 rounded-full peer-checked:border-gold-400 peer-checked:bg-gold-400 transition-all flex items-center justify-center">
+                                    <div class="w-2 h-2 bg-dark-950 rounded-full"></div>
+                                </div>
+                                <span
+                                    class="text-[10px] md:text-xs font-bold uppercase tracking-widest text-gray-400 group-hover:text-white transition-colors">Lunas
+                                    (Pelunasan Di Awal)</span>
+                                <span class="text-xl md:text-2xl font-light mt-2">{{ $package->formatted_price }}</span>
+                                <span
+                                    class="text-[9px] md:text-[10px] text-gray-500 mt-1 uppercase tracking-wider">Total
+                                    Pembayaran
+                                    Penuh</span>
+                            </label>
+                            <label
+                                class="relative flex flex-col p-4 md:p-6 bg-dark-800/50 border border-dark-700 cursor-pointer hover:border-gold-400 transition-colors group">
+                                <input type="radio" name="payment_type" value="dp" {{ old('payment_type') === 'dp' ? 'checked' : '' }} class="sr-only peer">
+                                <div
+                                    class="absolute top-4 md:top-6 right-4 md:right-6 w-5 h-5 border-2 border-dark-600 rounded-full peer-checked:border-gold-400 peer-checked:bg-gold-400 transition-all flex items-center justify-center">
+                                    <div class="w-2 h-2 bg-dark-950 rounded-full"></div>
+                                </div>
+                                <span
+                                    class="text-[10px] md:text-xs font-bold uppercase tracking-widest text-gray-400 group-hover:text-white transition-colors">DP
+                                    (Booking Fee)</span>
+                                <span
+                                    class="text-xl md:text-2xl font-light mt-2">{{ $package->formatted_down_payment }}</span>
+                                <span
+                                    class="text-[9px] md:text-[10px] text-gray-500 mt-1 uppercase tracking-wider">Bayar
+                                    DP Dulu
+                                    Untuk Ambil Slot</span>
+                            </label>
+                        </div>
                     </div>
 
                     <!-- Date Picker -->
@@ -136,27 +189,12 @@
                         <div id="calendar-container"
                             class="bg-dark-800/30 border border-dark-700 rounded-sm overflow-hidden">
                             <div class="grid grid-cols-7 border-b border-dark-700 bg-dark-900/50">
-                                <div
-                                    class="py-3 text-center text-[10px] uppercase tracking-widest text-gray-500 font-semibold">
-                                    Min</div>
-                                <div
-                                    class="py-3 text-center text-[10px] uppercase tracking-widest text-gray-500 font-semibold">
-                                    Sen</div>
-                                <div
-                                    class="py-3 text-center text-[10px] uppercase tracking-widest text-gray-500 font-semibold">
-                                    Sel</div>
-                                <div
-                                    class="py-3 text-center text-[10px] uppercase tracking-widest text-gray-500 font-semibold">
-                                    Rab</div>
-                                <div
-                                    class="py-3 text-center text-[10px] uppercase tracking-widest text-gray-500 font-semibold">
-                                    Kam</div>
-                                <div
-                                    class="py-3 text-center text-[10px] uppercase tracking-widest text-gray-500 font-semibold">
-                                    Jum</div>
-                                <div
-                                    class="py-3 text-center text-[10px] uppercase tracking-widest text-gray-500 font-semibold">
-                                    Sab</div>
+                                @foreach(['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'] as $dayName)
+                                    <div
+                                        class="py-3 text-center text-[9px] md:text-[10px] uppercase tracking-widest text-gray-500 font-bold">
+                                        {{ $dayName }}
+                                    </div>
+                                @endforeach
                             </div>
                             <div id="calendar-days" class="grid grid-cols-7 gap-px bg-dark-700"></div>
                         </div>
@@ -243,7 +281,7 @@
                 const isAvailable = !isPast && (dayData.remaining_slots > 0 && !dayData.is_blocked);
                 const isSelected = selectedDate === dateStr;
 
-                let classes = 'aspect-square relative flex flex-col items-center justify-center p-2 transition-all duration-200 group ';
+                let classes = 'aspect-square relative flex flex-col items-center justify-center p-1 md:p-2 transition-all duration-200 group ';
                 let statusText = '';
 
                 if (isPast) {
@@ -256,24 +294,24 @@
                     classes += 'bg-dark-900 cursor-pointer hover:bg-dark-800';
                 }
 
-                const dayNumberClass = isToday ? 'text-gold-400 font-bold' : (isSelected ? 'text-dark-950' : (dayData.is_blocked && !isPast ? 'text-red-500 font-bold' : 'text-gray-300'));
+                const dayNumberClass = isToday ? 'text-gold-400 font-black' : (isSelected ? 'text-dark-950' : (dayData.is_blocked && !isPast ? 'text-red-500 font-black' : 'text-gray-300'));
 
                 if (isPast) {
                     statusText = '';
                 } else if (dayData.is_blocked || (dayData.total_slots > 0 && dayData.remaining_slots <= 0)) {
                     const blockMsg = dayData.is_blocked ? 'Libur' : 'Penuh';
-                    const weightClass = dayData.is_blocked ? 'font-black tracking-widest' : 'font-bold tracking-tight';
-                    statusText = `<span class="text-[10px] uppercase ${weightClass} text-red-500 mt-2">${blockMsg}</span>`;
+                    const weightClass = 'font-black tracking-tight';
+                    statusText = `<span class="text-[8px] md:text-[10px] uppercase ${weightClass} text-red-500 mt-1 md:mt-2">${blockMsg}</span>`;
                 } else if (isAvailable) {
                     statusText = `
-                        <span class="text-sm font-black text-green-400 transition-colors">${dayData.remaining_slots}</span>
-                        <span class="text-[7px] uppercase font-bold tracking-tighter text-gray-500 -mt-1 group-hover:text-gray-400 transition-colors">Slot</span>`;
+                        <span class="text-xs md:text-sm font-black text-green-400 transition-colors leading-none">${dayData.remaining_slots}</span>
+                        <span class="text-[6px] md:text-[7px] uppercase font-bold tracking-tighter text-gray-500 -mt-0.5 md:-mt-1 group-hover:text-gray-400 transition-colors">Slot</span>`;
                 }
 
                 html += `
                     <div class="${classes}" ${isAvailable ? `onclick="selectDate('${dateStr}', ${day})"` : ''}>
-                        <span class="${dayNumberClass} text-sm font-light group-hover:text-white transition-colors h-6 flex items-center justify-center">${day}</span>
-                        <div class="mt-2 flex flex-col items-center flex-1 justify-end pb-1 w-full text-center">
+                        <span class="${dayNumberClass} text-xs md:text-sm font-light group-hover:text-white transition-colors h-5 md:h-6 flex items-center justify-center">${day}</span>
+                        <div class="mt-1 md:mt-2 flex flex-col items-center flex-1 justify-end pb-0.5 md:pb-1 w-full text-center">
                             ${statusText}
                         </div>
                         ${isSelected ? '' : `

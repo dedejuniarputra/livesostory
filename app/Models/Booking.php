@@ -11,10 +11,12 @@ class Booking extends Model
 
     protected $fillable = [
         'name',
-        'email',
+        'ig_username',
         'phone',
         'address',
         'package_id',
+        'payment_type',
+        'amount_to_pay',
         'booking_date',
         'booking_time',
         'location',
@@ -25,6 +27,7 @@ class Booking extends Model
 
     protected $casts = [
         'booking_date' => 'date',
+        'amount_to_pay' => 'decimal:2',
     ];
 
 

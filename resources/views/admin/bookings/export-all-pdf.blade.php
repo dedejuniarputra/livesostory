@@ -83,6 +83,16 @@
             background: #d4edda;
             color: #155724;
         }
+
+        .text-gold {
+            color: #856404;
+            font-weight: bold;
+        }
+
+        .small-gray {
+            font-size: 8px;
+            color: #777;
+        }
     </style>
 </head>
 
@@ -95,10 +105,19 @@
     <div class="info">
         <table>
             <tr>
-                <td style="border:none; padding:0; width: 50%;">
-                    <strong>Kategori:</strong> {{ ucfirst($status) }}
+                <td style="border:none; padding:0; width: 60%;">
+                    <strong>Kategori:</strong> {{ ucfirst($status) }}<br>
+                    @if(request('search'))
+                        <strong>Pencarian:</strong> "{{ request('search') }}"<br>
+                    @endif
+                    @if(request('date'))
+                        <strong>Tanggal:</strong> {{ \Carbon\Carbon::parse(request('date'))->format('d M Y') }}<br>
+                    @endif
+                    @if(request('month'))
+                        <strong>Bulan:</strong> {{ \Carbon\Carbon::parse(request('month'))->format('F Y') }}<br>
+                    @endif
                 </td>
-                <td style="border:none; padding:0; text-align: right;">
+                <td style="border:none; padding:0; text-align: right; vertical-align: top;">
                     <strong>Tanggal Cetak:</strong> {{ now()->format('d M Y, H:i') }} WIB
                 </td>
             </tr>
@@ -108,10 +127,12 @@
     <table>
         <thead>
             <tr>
-                <th width="5%" class="text-center">No</th>
-                <th width="25%">Pelanggan</th>
-                <th width="30%">Paket</th>
-                <th width="15%">Tanggal Acara</th>
+                <th width="4%" class="text-center">No</th>
+                <th width="18%">Pelanggan</th>
+                <th width="10%">IG</th>
+                <th width="15%">Paket</th>
+                <th width="13%">Waktu</th>
+                <th width="15%">Pembayaran</th>
                 <th width="25%">Lokasi</th>
             </tr>
         </thead>
@@ -123,16 +144,37 @@
                         <strong>{{ $booking->name }}</strong><br>
                         {{ $booking->phone }}
                     </td>
+                    <td>{{ $booking->ig_username ?? '-' }}</td>
                     <td>{{ $booking->package->name ?? '-' }}</td>
-                    <td>{{ $booking->booking_date->format('d M Y') }}</td>
-                    <td>{{ $booking->location ?? '-' }}</td>
+                    <td>
+                        {{ $booking->booking_date->format('d M Y') }}<br>
+                        <span class="small-gray">Jam: {{ $booking->booking_time ?? '-' }}</span>
+                    </td>
+                    <td>
+                        <span
+                            style="text-transform: uppercase; font-size: 8px; font-weight: bold; color: #666;">{{ $booking->payment_type }}</span><br>
+                        <span class="text-gold">Rp {{ number_format($booking->amount_to_pay, 0, ',', '.') }}</span>
+                    </td>
+                    <td style="word-wrap: break-word;">{{ $booking->location ?? '-' }}</td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="5" class="text-center">Tidak ada data booking.</td>
+                    <td colspan="7" class="text-center">Tidak ada data booking.</td>
                 </tr>
             @endforelse
         </tbody>
+        @if($bookings->count() > 0)
+            <tfoot>
+                <tr>
+                    <td colspan="5" style="text-align: right; font-weight: bold; background-color: #f9fafb; padding: 10px;">
+                        TOTAL OMSET:</td>
+                    <td colspan="2"
+                        style="font-size: 14px; color: #155724; font-weight: bold; background-color: #f9fafb; padding: 10px;">
+                        Rp {{ number_format($bookings->sum('amount_to_pay'), 0, ',', '.') }}
+                    </td>
+                </tr>
+            </tfoot>
+        @endif
     </table>
 
     <div class="footer">

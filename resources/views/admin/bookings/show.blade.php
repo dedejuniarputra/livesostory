@@ -18,8 +18,8 @@
                         <p class="text-sm">{{ $booking->name }}</p>
                     </div>
                     <div>
-                        <p class="text-xs text-gray-500">Email</p>
-                        <p class="text-sm">{{ $booking->email }}</p>
+                        <p class="text-xs text-gray-500">Nama IG / Link IG</p>
+                        <p class="text-sm">{{ $booking->ig_username ?? '-' }}</p>
                     </div>
                     <div>
                         <p class="text-xs text-gray-500">Phone</p>
@@ -42,12 +42,22 @@
                     </div>
                     <div>
                         <p class="text-xs text-gray-500">Tanggal</p>
-                        <p class="text-sm">{{ $booking->booking_date->format('d F Y') }}</p>
+                        <p class="text-sm font-medium">{{ $booking->booking_date->format('d F Y') }} <span
+                                class="text-gray-500 font-normal">at</span> {{ $booking->booking_time }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500">Metode Pembayaran</p>
+                        <p class="text-sm uppercase tracking-wide">{{ $booking->payment_type }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500">Jumlah Harus Dibayar</p>
+                        <p class="text-sm text-gold-400 font-bold">Rp
+                            {{ number_format($booking->amount_to_pay, 0, ',', '.') }}</p>
                     </div>
 
                     @if($booking->location)
                         <div>
-                            <p class="text-xs text-gray-500">Lokasi</p>
+                            <p class="text-xs text-gray-500">Alamat</p>
                             <p class="text-sm">{{ $booking->location }}</p>
                         </div>
                     @endif

@@ -15,6 +15,9 @@ class ScheduleController extends Controller
         $month = (int) $request->get('month', now()->month);
         $year = (int) $request->get('year', now()->year);
 
+        // Auto-delete past special date settings to keep the list clean
+        BlockedDate::where('date', '<', now()->toDateString())->delete();
+
         $startDate = Carbon::createFromDate($year, $month, 1)->startOfMonth();
         $endDate = $startDate->copy()->endOfMonth();
 
@@ -51,21 +54,37 @@ class ScheduleController extends Controller
             'dates' => 'required|string', // Support multiple dates separated by comma
             'slots' => 'nullable|integer|min:0',
             'reason' => 'nullable|string|max:255',
+            'mode' => 'nullable|string|in:add,sub,set',
         ]);
 
         $dates = explode(',', $validated['dates']);
-        $slots = $validated['slots'] ?? 0;
+        $requestedSlots = $validated['slots'] ?? 0;
+        $mode = $validated['mode'] ?? 'set';
+
+        $defaultSlots = (int) \App\Models\Setting::get('default_slots_per_day', 1);
 
         foreach ($dates as $date) {
             $date = trim($date);
             if (empty($date))
                 continue;
 
+            $finalSlots = $requestedSlots;
+
+            if ($mode === 'add') {
+                $currentSetting = BlockedDate::where('date', $date)->first();
+                $currentLimit = $currentSetting ? $currentSetting->slots : $defaultSlots;
+                $finalSlots = $currentLimit + $requestedSlots;
+            } elseif ($mode === 'sub') {
+                $currentSetting = BlockedDate::where('date', $date)->first();
+                $currentLimit = $currentSetting ? $currentSetting->slots : $defaultSlots;
+                $finalSlots = max(0, $currentLimit - $requestedSlots);
+            }
+
             BlockedDate::updateOrCreate(
                 ['date' => $date],
                 [
                     'reason' => $validated['reason'] ?? null,
-                    'slots' => $slots
+                    'slots' => $finalSlots
                 ]
             );
         }

@@ -18,28 +18,26 @@
     @endpush
 
     <!-- Slots Management Section (Top) -->
-    <div class="grid lg:grid-cols-2 gap-8 mb-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
         <!-- Default Slots Setting -->
         <form action="{{ route('admin.settings.update') }}" method="POST"
             class="bg-dark-800/50 border border-dark-700 p-6 rounded h-full">
             @csrf @method('PUT')
             <h3 class="text-xs tracking-widest uppercase text-gold-400 mb-2">Default Slot Per Hari</h3>
             <p class="text-xs text-gray-500 mb-6">Jumlah slot otomatis untuk hari-hari biasa.</p>
-            <div class="flex items-center gap-4 mt-auto">
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mt-auto">
                 <input type="number" name="default_slots_per_day" value="{{ $defaultSlots ?? 1 }}"
-                    class="w-full bg-dark-800 border border-dark-600 text-white text-sm px-4 py-3 focus:border-gold-400 focus:ring-0 rounded">
+                    class="w-full bg-dark-800 border border-dark-600 text-sm px-4 py-3 focus:border-gold-400 focus:ring-0 rounded">
                 <button type="submit"
-                    class="whitespace-nowrap px-6 py-3 bg-gold-400 text-dark-950 text-xs tracking-widest uppercase font-semibold hover:bg-gold-300 transition-colors rounded">Update
-                    Default</button>
+                    class="whitespace-nowrap px-6 py-3 bg-gold-400 text-dark-950 text-[10px] md:text-xs tracking-widest uppercase font-bold hover:bg-gold-300 transition-colors rounded">Update</button>
             </div>
         </form>
 
-        <!-- Custom Slot Setting -->
         <form action="{{ route('admin.schedules.block') }}" method="POST"
             class="bg-dark-800/50 border border-dark-700 p-6 rounded h-full">
             @csrf
-            <h3 class="text-xs tracking-widest uppercase text-gold-400 mb-2">Atur Slot Tanggal Khusus</h3>
-            <p class="text-xs text-gray-500 mb-4">Ubah jumlah slot untuk tanggal tertentu (bukan untuk tutup).</p>
+            <h3 class="text-xs tracking-widest uppercase text-gold-400 mb-2">Update Slot Tanggal Khusus</h3>
+            <p class="text-xs text-gray-500 mb-4">Tambah atau kurangi jumlah slot untuk tanggal tertentu.</p>
             <div class="space-y-3">
                 <div class="grid grid-cols-2 gap-3">
                     <input type="text" id="datepicker_slots" name="dates" placeholder="Pilih Tanggal" required
@@ -47,20 +45,26 @@
                     <input type="number" name="slots" value="1" min="1" required
                         class="bg-dark-800 border border-dark-600 text-white text-sm px-4 py-3 focus:border-gold-400 focus:ring-0 rounded">
                 </div>
-                <button type="submit"
-                    class="w-full px-4 py-3 bg-gold-400 text-dark-950 text-xs tracking-widest uppercase font-semibold hover:bg-gold-300 transition-colors rounded">Update
-                    Slot</button>
+                <div class="grid grid-cols-2 gap-3">
+                    <button type="submit" name="mode" value="add"
+                        class="px-4 py-3 bg-gold-400 text-dark-950 text-[10px] tracking-widest uppercase font-bold hover:bg-gold-300 transition-colors rounded">Tambah
+                        Slot</button>
+                    <button type="submit" name="mode" value="sub"
+                        class="px-4 py-3 bg-red-500 text-white text-[10px] tracking-widest uppercase font-bold hover:bg-red-400 transition-colors rounded">Kurangi
+                        Slot</button>
+                </div>
             </div>
         </form>
     </div>
 
-    <div class="grid lg:grid-cols-2 gap-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <!-- Block Schedule Form (Bottom) -->
         <div class="order-2 lg:order-1">
             <h3 class="text-sm font-medium mb-4 text-red-400">Block & Tutup Tanggal</h3>
             <form action="{{ route('admin.schedules.block') }}" method="POST"
                 class="bg-dark-800/50 border border-dark-700 p-6 rounded space-y-4">
                 @csrf
+                <input type="hidden" name="mode" value="set">
                 <input type="hidden" name="slots" value="0">
                 <div>
                     <label class="block text-xs tracking-widest uppercase text-gray-400 mb-2">Pilih Tanggal
@@ -152,7 +156,8 @@
                 <!-- Calendar Header -->
                 <div class="grid grid-cols-7 border-b border-dark-700 bg-dark-900/50">
                     @foreach(['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'] as $dayName)
-                        <div class="py-3 text-center text-[10px] uppercase tracking-widest text-gray-500 font-semibold">
+                        <div
+                            class="py-3 text-center text-[9px] md:text-[10px] uppercase tracking-widest text-gray-500 font-bold">
                             {{ $dayName }}
                         </div>
                     @endforeach
@@ -187,24 +192,28 @@
                             $isAvailable = !$isPast && !$isBlocked && $remainingSlots > 0;
                         @endphp
 
-                        <div class="calendar-day aspect-square relative flex flex-col items-center justify-center p-2 transition-all duration-200 group
-                                    {{ $isPast ? 'bg-dark-900/40 opacity-40 cursor-default' : ($isBlocked ? 'bg-red-500/20' : 'bg-dark-900') }}
-                                    {{ $isPast ? '' : 'cursor-pointer hover:bg-dark-800' }}" id="cell-{{ $dateStr }}"
-                            @if(!$isPast) onclick="toggleDateSelection('{{ $dateStr }}', event)" @endif>
+                        <div class="calendar-day aspect-square relative flex flex-col items-center justify-center p-1 md:p-2 transition-all duration-200 group
+                                                                            {{ $isPast ? 'bg-dark-900/40 opacity-40 cursor-default' : ($isBlocked ? 'bg-red-500/20' : 'bg-dark-900') }}
+                                                                            {{ $isPast ? '' : 'cursor-pointer hover:bg-dark-800' }}"
+                            id="cell-{{ $dateStr }}" @if(!$isPast) onclick="toggleDateSelection('{{ $dateStr }}', event)"
+                            @endif>
 
                             <span
-                                class="text-sm pointer-events-none {{ $isBlocked ? 'text-red-500 font-bold' : ($isToday ? 'text-gold-400 font-bold' : 'text-gray-300') }} group-hover:text-white">{{ $day }}</span>
+                                class="text-xs md:text-sm pointer-events-none {{ $isBlocked ? 'text-red-500 font-black' : ($isToday ? 'text-gold-400 font-black' : 'text-gray-300') }} group-hover:text-white">{{ $day }}</span>
 
-                            <div class="mt-2 flex flex-col items-center flex-1 justify-end pb-1 w-full pointer-events-none">
+                            <div
+                                class="mt-1 md:mt-2 flex flex-col items-center flex-1 justify-end pb-0.5 md:pb-1 w-full pointer-events-none">
                                 @if($isBlocked)
-                                    <span class="text-[10px] uppercase font-black tracking-wider text-red-500">Libur</span>
+                                    <span
+                                        class="text-[8px] md:text-[10px] uppercase font-black tracking-wider text-red-500">Libur</span>
                                 @elseif($isFull)
-                                    <span class="text-[10px] uppercase font-bold tracking-tight text-red-400">Penuh</span>
+                                    <span
+                                        class="text-[8px] md:text-[10px] uppercase font-black tracking-tight text-red-400">Penuh</span>
                                 @elseif($isAvailable)
                                     <div class="flex flex-col items-center leading-none">
-                                        <span class="text-sm font-black text-green-400">{{ $remainingSlots }}</span>
+                                        <span class="text-xs md:text-sm font-black text-green-400">{{ $remainingSlots }}</span>
                                         <span
-                                            class="text-[7px] uppercase font-bold tracking-tighter text-gray-500 group-hover:text-gray-400">Slot</span>
+                                            class="text-[6px] md:text-[7px] uppercase font-bold tracking-tighter text-gray-500 group-hover:text-gray-400">Slot</span>
                                     </div>
                                 @endif
                             </div>
