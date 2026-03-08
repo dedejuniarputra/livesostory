@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>LIVESOSTORY.CO — Redirecting to WhatsApp</title>
+    <meta http-equiv="refresh" content="4;url={{ $redirectUrl }}">
     <link rel="icon" type="image/jpeg" href="{{ asset('images/ph.jpeg') }}">
     <style>
         body {
@@ -60,60 +61,47 @@
     <div class="container">
         <div class="spinner"></div>
         <h1>MEMBUKA WHATSAPP</h1>
-        <p class="mb-8">Anda akan otomatis kembali ke Beranda setelah pesan terkirim.</p>
-        <a href="{{ route('home') }}"
+        <p class="mb-8">Anda akan otomatis kembali ke Halaman Pembayaran setelah pesan terkirim.</p>
+        <a href="{{ $redirectUrl }}"
             class="text-[10px] tracking-[0.2em] uppercase text-gold-400/50 hover:text-gold-400 transition-colors border-b border-gold-400/20 pb-1">Klik
             di sini jika tidak otomatis kembali</a>
     </div>
 
     <script>
         (function () {
-            var waUrl = '{{ $waUrl }}';
+            var waUrl = '{!! $waUrl !!}';
+            var redirectUrl = '{!! $redirectUrl !!}';
             var redirected = false;
 
-            function goToHome() {
+            function goToTarget() {
                 if (!redirected) {
                     redirected = true;
-                    // Use a slight delay to ensure the browser handles the location change smoothly
                     setTimeout(function () {
-                        window.location.replace('{{ route("home") }}');
-                    }, 500);
+                        window.location.replace(redirectUrl);
+                    }, 100);
                 }
             }
 
-            // 1. Launch WhatsApp immediately
+            // 1. Launch WhatsApp
             window.location.href = waUrl;
 
-            // 2. Arm the "Return home" listeners AFTER a delay
-            // This prevents the focus/visibility events from firing prematurely
-            // while the protocol handler (WhatsApp) is still launching.
-            setTimeout(function() {
-                // Detect when the window regains focus (means they came back from WA)
-                window.addEventListener('focus', goToHome);
-
-                // Detect visibility change (more reliable on some mobile browsers)
+            // 2. React gracefully when user returns to this tab
+            setTimeout(function () {
+                window.addEventListener('focus', goToTarget);
                 document.addEventListener('visibilitychange', function () {
                     if (document.visibilityState === 'visible') {
-                        goToHome();
+                        goToTarget();
                     }
                 });
-
-                // Detect pageshow (back button)
                 window.addEventListener('pageshow', function (event) {
                     if (event.persisted) {
-                        goToHome();
+                        goToTarget();
                     }
                 });
-            }, 2000);
+            }, 1000);
 
-            // 3. Fallback: If user clicks the manual link
-            document.querySelector('a').addEventListener('click', function () {
-                redirected = true;
-            });
-
-            // 4. Safety Timeout: If they stay on this page for too long
-            // Increased to 10 seconds
-            setTimeout(goToHome, 10000);
+            // 3. Fallback timeout if they stay on this page too long or events fail
+            setTimeout(goToTarget, 4000);
         })();
     </script>
 </body>

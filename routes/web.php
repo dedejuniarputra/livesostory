@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\ScheduleController;
 use App\Http\Controllers\Admin\PaymentAccountController;
 use App\Http\Controllers\Admin\ContactController as AdminContactController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\VendorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,6 +55,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('packages', PackageController::class);
     Route::delete('/packages/{package}/delete-image', [PackageController::class, 'deleteImage'])->name('packages.delete-image');
 
+    // Vendor / Manual Booking
+    Route::get('/vendor/booking', [VendorController::class, 'create'])->name('vendor.create');
+    Route::post('/vendor/booking', [VendorController::class, 'store'])->name('vendor.store');
+
     // Booking Management
     Route::get('/bookings', [AdminBookingController::class, 'index'])->name('bookings.index');
     Route::get('/bookings/export-all-pdf', [AdminBookingController::class, 'exportAllPdf'])->name('bookings.export-all-pdf');
@@ -61,6 +66,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/bookings/{booking}', [AdminBookingController::class, 'show'])->name('bookings.show');
 
     Route::patch('/bookings/{booking}/status', [AdminBookingController::class, 'updateStatus'])->name('bookings.update-status');
+    Route::patch('/bookings/{booking}/lunas', [AdminBookingController::class, 'markAsLunas'])->name('bookings.mark-lunas');
     Route::delete('/bookings/all', [AdminBookingController::class, 'destroyAll'])->name('bookings.destroy-all');
     Route::delete('/bookings/{booking}', [AdminBookingController::class, 'destroy'])->name('bookings.destroy');
 

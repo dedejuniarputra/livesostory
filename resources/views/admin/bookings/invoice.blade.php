@@ -172,8 +172,22 @@
 <body>
     <div class="invoice-box">
         <div class="header">
-            <h1>LIVESOSTORY.CO</h1>
-            <p>Invoice / Bukti Pemesanan</p>
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    <td style="width: 45%; text-align: left; vertical-align: middle;">
+                        <h1>LIVESOSTORY.CO</h1>
+                        <p style="margin-top: 5px;">Invoice / Bukti Pemesanan</p>
+                    </td>
+                    <td
+                        style="width: 55%; text-align: right; border-left: 1px solid #ddd; padding-left: 15px; vertical-align: middle;">
+                        <h3 style="margin: 0; font-size: 13px; letter-spacing: 1px; color: #1a1a1a;">TERIMA KASIH</h3>
+                        <p style="margin: 3px 0; font-size: 10px; color: #555; text-transform: none; line-height: 1.3;">
+                            Atas kepercayaannya memilih LIVESOSTORY.CO untuk mengabadikan momen berharga Anda.</p>
+                        <p style="margin: 0; font-size: 10px; color: #333; font-weight: bold; text-transform: none;">IG:
+                            @livesostory.co</p>
+                    </td>
+                </tr>
+            </table>
         </div>
 
         <div class="info-section">
@@ -314,10 +328,7 @@
         </div>
 
         <div class="footer">
-            <h3 style="color: #1a1a1a; margin-bottom: 5px; font-size: 14px; letter-spacing: 1px;">TERIMA KASIH</h3>
-            <p style="margin-top: 0; margin-bottom: 15px;">Atas kepercayaannya memilih LIVESOSTORY.CO untuk mengabadikan
-                momen berharga Anda.</p>
-            <p>IG: @livesostory.co</p>
+            {{-- Thank you moved to header --}}
         </div>
     </div>
 </body>

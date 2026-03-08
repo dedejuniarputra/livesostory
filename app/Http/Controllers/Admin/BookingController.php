@@ -45,6 +45,20 @@ class BookingController extends Controller
         return view('admin.bookings.show', compact('booking'));
     }
 
+    public function markAsLunas(Booking $booking)
+    {
+        $booking->load('package');
+
+        if ($booking->payment_type === 'dp') {
+            $booking->update([
+                'payment_type' => 'lunas',
+                'amount_to_pay' => $booking->package->price
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Status pembayaran berhasil diubah menjadi Lunas!');
+    }
+
     public function destroy(Booking $booking)
     {
         $booking->delete();

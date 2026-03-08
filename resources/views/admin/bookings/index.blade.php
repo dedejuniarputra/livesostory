@@ -134,6 +134,16 @@
                         </td>
                         <td class="px-6 py-3">
                             <div class="flex items-center justify-end gap-3">
+                                @if($booking->payment_type === 'dp')
+                                    <form action="{{ route('admin.bookings.mark-lunas', $booking) }}" method="POST"
+                                        onsubmit="return confirm('Yakin ingin mengubah status pembayaran ini menjadi Lunas?')">
+                                        @csrf @method('PATCH')
+                                        <button type="submit"
+                                            class="text-[10px] uppercase tracking-wider bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 px-3 py-1.5 rounded hover:bg-emerald-500/20 transition-all font-bold" title="Ubah menjadi LUNAS">
+                                            Set Lunas
+                                        </button>
+                                    </form>
+                                @endif
                                 <a href="{{ route('admin.bookings.export-invoice', $booking) }}"
                                     class="text-[10px] uppercase tracking-wider bg-gold-400/10 border border-gold-400/30 text-gold-400 px-3 py-1.5 rounded hover:bg-gold-400/20 transition-all font-bold">
                                     Cetak Invoice

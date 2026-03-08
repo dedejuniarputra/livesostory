@@ -38,8 +38,10 @@ return [
 
         'public' => [
             'driver' => 'local',
-            'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            // MENGHINDARI SYMLINK ERROR DI SHARED HOSTING:
+            // Langsung arahkan file yang diupload ke folder fisik public/storage atau public_html/storage
+            'root' => is_dir(base_path('public_html')) ? base_path('public_html/storage') : base_path('public/storage'),
+            'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
             'throw' => false,
         ],

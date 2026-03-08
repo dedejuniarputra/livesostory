@@ -127,7 +127,9 @@ class BookingController extends Controller
             $booking->update(['status' => 'completed']);
         }
 
-        return view('booking.redirect-whatsapp', compact('waUrl'));
+        $redirectUrl = route('booking.payment', $booking);
+
+        return view('booking.redirect-whatsapp', compact('waUrl', 'redirectUrl'));
     }
 
     public function getAvailableDates(Request $request)
