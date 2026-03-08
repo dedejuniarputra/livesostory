@@ -13,7 +13,6 @@ class Booking extends Model
         'name',
         'ig_username',
         'phone',
-        'address',
         'package_id',
         'payment_type',
         'amount_to_pay',
@@ -22,7 +21,6 @@ class Booking extends Model
         'location',
         'notes',
         'status',
-        'payment_proof',
     ];
 
     protected $casts = [

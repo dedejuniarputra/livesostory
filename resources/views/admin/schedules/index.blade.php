@@ -117,7 +117,7 @@
                                         Slot</span>
                                 @endif
                             </div>
-                            <p class="text-xs text-gray-500">{{ $blocked->reason ?? 'Tidak ada keterangan' }}</p>
+
                         </div>
                         <form action="{{ route('admin.schedules.unblock', $blocked) }}" method="POST"
                             onsubmit="return confirm('Kembalikan tgl ini ke pengaturan default?')">
@@ -193,8 +193,8 @@
                         @endphp
 
                         <div class="calendar-day aspect-square relative flex flex-col items-center justify-center p-1 md:p-2 transition-all duration-200 group
-                                                                            {{ $isPast ? 'bg-dark-900/40 opacity-40 cursor-default' : ($isBlocked ? 'bg-red-500/20' : 'bg-dark-900') }}
-                                                                            {{ $isPast ? '' : 'cursor-pointer hover:bg-dark-800' }}"
+                                                                                    {{ $isPast ? 'bg-dark-900/40 opacity-40 cursor-default' : ($isBlocked ? 'bg-red-500/20' : 'bg-dark-900') }}
+                                                                                    {{ $isPast ? '' : 'cursor-pointer hover:bg-dark-800' }}"
                             id="cell-{{ $dateStr }}" @if(!$isPast) onclick="toggleDateSelection('{{ $dateStr }}', event)"
                             @endif>
 

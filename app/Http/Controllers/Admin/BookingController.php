@@ -14,7 +14,7 @@ class BookingController extends Controller
         $query = Booking::with('package')->latest();
         $this->applyFilters($query, $request);
 
-        $totalOmset = (clone $query)->sum('amount_to_pay');
+        $totalOmset = (clone $query)->where('status', 'completed')->sum('amount_to_pay');
         $bookings = $query->paginate(15);
         return view('admin.bookings.index', compact('bookings', 'totalOmset'));
     }
@@ -71,6 +71,18 @@ class BookingController extends Controller
         $pdf = Pdf::loadView('admin.bookings.export-all-pdf', compact('bookings', 'status'));
 
         $filename = 'Data-Booking-Completed-' . now()->format('d-m-Y') . '.pdf';
+
+        return $pdf->download($filename);
+    }
+
+    public function exportInvoice(Booking $booking)
+    {
+        $booking->load('package');
+
+        $pdf = Pdf::loadView('admin.bookings.invoice', compact('booking'))
+            ->setPaper('a4', 'portrait');
+
+        $filename = 'INVOICE - ' . $booking->name . '.pdf';
 
         return $pdf->download($filename);
     }

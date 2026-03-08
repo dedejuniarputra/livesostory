@@ -48,8 +48,14 @@
                         @endif
                         <label
                             class="block text-xs tracking-widest uppercase text-gray-400 mb-2">{{ $settings['hero_image'] ? 'Ganti Gambar' : 'Upload Gambar' }}</label>
-                        <input type="file" name="hero_image" accept="image/*"
+                        <input type="file" name="hero_image" accept="image/*" id="hero_image_input"
+                            onchange="previewImage(this, 'hero_image_preview')"
                             class="w-full bg-dark-800 border border-dark-600 text-white text-sm px-4 py-3 focus:border-gold-400 focus:ring-0 rounded file:mr-4 file:py-1 file:px-3 file:rounded file:border-0 file:text-xs file:bg-gold-400/20 file:text-gold-400">
+                        <div id="hero_image_preview_container" class="mt-3 hidden">
+                            <p class="text-[10px] tracking-widest uppercase text-gold-400 mb-1">Preview Gambar Baru</p>
+                            <img id="hero_image_preview" src="#" alt="Preview"
+                                class="w-full max-h-48 object-cover rounded border border-gold-400/30">
+                        </div>
                         <p class="text-xs text-gray-500 mt-1">Format: JPG, PNG, WebP (max 10MB)</p>
                     </div>
                 </div>
@@ -76,8 +82,14 @@
                         @endif
                         <label
                             class="block text-xs tracking-widest uppercase text-gray-400 mb-2">{{ $settings['contact_image'] ? 'Ganti Gambar' : 'Upload Gambar' }}</label>
-                        <input type="file" name="contact_image" accept="image/*"
+                        <input type="file" name="contact_image" accept="image/*" id="contact_image_input"
+                            onchange="previewImage(this, 'contact_image_preview')"
                             class="w-full bg-dark-800 border border-dark-600 text-white text-sm px-4 py-3 focus:border-gold-400 focus:ring-0 rounded file:mr-4 file:py-1 file:px-3 file:rounded file:border-0 file:text-xs file:bg-gold-400/20 file:text-gold-400">
+                        <div id="contact_image_preview_container" class="mt-3 hidden">
+                            <p class="text-[10px] tracking-widest uppercase text-gold-400 mb-1">Preview Gambar Baru</p>
+                            <img id="contact_image_preview" src="#" alt="Preview"
+                                class="w-full max-h-48 object-cover rounded border border-gold-400/30">
+                        </div>
                         <p class="text-xs text-gray-500 mt-1">Format: JPG, PNG, WebP (max 10MB)</p>
                     </div>
 
@@ -97,7 +109,7 @@
                     </div>
                     <div>
                         <label class="block text-xs tracking-widest uppercase text-gray-400 mb-2">TikTok URL</label>
-                        <input type="url" name="tiktok" value="{{ $settings['tiktok'] ?? '' }}" 
+                        <input type="url" name="tiktok" value="{{ $settings['tiktok'] ?? '' }}"
                             placeholder="https://www.tiktok.com/@akangfotoo"
                             class="w-full bg-dark-800 border border-dark-600 text-white text-sm px-4 py-3 focus:border-gold-400 focus:ring-0 rounded placeholder-gray-600">
                         <p class="text-xs text-gray-500 mt-1">Masukkan link lengkap profil TikTok Anda.</p>
@@ -134,4 +146,25 @@
         style="display: none;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus gambar ini?')">
         @csrf @method('DELETE')
     </form>
+
+    <script>
+        function previewImage(input, previewId) {
+            const previewContainer = document.getElementById(previewId + '_container');
+            const previewImage = document.getElementById(previewId);
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    previewImage.src = e.target.result;
+                    previewContainer.classList.remove('hidden');
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                previewImage.src = '#';
+                previewContainer.classList.add('hidden');
+            }
+        }
+    </script>
 @endpush

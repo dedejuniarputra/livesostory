@@ -53,7 +53,6 @@ class ScheduleController extends Controller
         $validated = $request->validate([
             'dates' => 'required|string', // Support multiple dates separated by comma
             'slots' => 'nullable|integer|min:0',
-            'reason' => 'nullable|string|max:255',
             'mode' => 'nullable|string|in:add,sub,set',
         ]);
 
@@ -83,7 +82,6 @@ class ScheduleController extends Controller
             BlockedDate::updateOrCreate(
                 ['date' => $date],
                 [
-                    'reason' => $validated['reason'] ?? null,
                     'slots' => $finalSlots
                 ]
             );

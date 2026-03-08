@@ -9,7 +9,7 @@ class BlockedDate extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['date', 'reason', 'slots'];
+    protected $fillable = ['date', 'slots'];
 
     protected $casts = [
         'date' => 'date',

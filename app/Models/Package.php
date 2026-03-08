@@ -13,14 +13,10 @@ class Package extends Model
         'name',
         'category_id',
         'category',
-        'image',
         'description',
         'price',
         'down_payment',
         'features',
-        'items_included',
-        'item_images',
-        'duration',
         'is_featured',
         'is_active',
         'sort_order',
@@ -28,8 +24,6 @@ class Package extends Model
 
     protected $casts = [
         'features' => 'array',
-        'items_included' => 'array',
-        'item_images' => 'array',
         'price' => 'decimal:2',
         'is_featured' => 'boolean',
         'is_active' => 'boolean',

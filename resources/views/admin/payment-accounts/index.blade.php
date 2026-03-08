@@ -32,7 +32,7 @@
 
     <!-- Accounts List -->
     <div class="bg-dark-800/50 border border-dark-700 rounded overflow-hidden">
-        <div class="w-full overflow-x-auto scrollbar-thin scrollbar-thumb-dark-700 -mx-px">
+        <div class="w-full overflow-x-auto scrollbar-thin scrollbar-thumb-dark-700">
             <div class="inline-block min-w-full align-middle">
                 <table class="w-full min-w-[700px]">
                     <thead>

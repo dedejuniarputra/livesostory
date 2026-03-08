@@ -57,6 +57,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Booking Management
     Route::get('/bookings', [AdminBookingController::class, 'index'])->name('bookings.index');
     Route::get('/bookings/export-all-pdf', [AdminBookingController::class, 'exportAllPdf'])->name('bookings.export-all-pdf');
+    Route::get('/bookings/{booking}/invoice', [AdminBookingController::class, 'exportInvoice'])->name('bookings.export-invoice');
     Route::get('/bookings/{booking}', [AdminBookingController::class, 'show'])->name('bookings.show');
 
     Route::patch('/bookings/{booking}/status', [AdminBookingController::class, 'updateStatus'])->name('bookings.update-status');

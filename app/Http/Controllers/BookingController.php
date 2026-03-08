@@ -36,6 +36,13 @@ class BookingController extends Controller
 
         $maxSlots = $dateSetting ? $dateSetting->slots : $defaultSlots;
         $currentBookings = Booking::where('booking_date', $validated['booking_date'])
+            ->where(function ($query) {
+                $query->where('status', '!=', 'pending')
+                    ->orWhere(function ($q) {
+                        $q->where('status', 'pending')
+                            ->where('created_at', '>=', now()->subMinutes(10));
+                    });
+            })
             ->count();
 
         if ($currentBookings >= $maxSlots) {
@@ -44,7 +51,7 @@ class BookingController extends Controller
         }
 
         $validated['package_id'] = $package->id;
-        $validated['status'] = 'completed';
+        $validated['status'] = 'pending'; // Change to pending initially
         $validated['amount_to_pay'] = $validated['payment_type'] === 'dp' ? $package->down_payment : $package->price;
 
         $booking = Booking::create($validated);
@@ -115,6 +122,11 @@ class BookingController extends Controller
 
         $waUrl = "https://wa.me/{$whatsappNumber}?text=" . urlencode($message);
 
+        // Update status to completed since user has confirmed and is sending proof
+        if ($booking->status === 'pending') {
+            $booking->update(['status' => 'completed']);
+        }
+
         return view('booking.redirect-whatsapp', compact('waUrl'));
     }
 
@@ -135,6 +147,13 @@ class BookingController extends Controller
 
         // Get booking counts per date
         $bookingCounts = Booking::whereBetween('booking_date', [$startDate, $endDate])
+            ->where(function ($query) {
+                $query->where('status', '!=', 'pending')
+                    ->orWhere(function ($q) {
+                        $q->where('status', 'pending')
+                            ->where('created_at', '>=', now()->subMinutes(10));
+                    });
+            })
             ->selectRaw('booking_date, count(*) as total')
             ->groupBy('booking_date')
             ->get()

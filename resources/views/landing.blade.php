@@ -77,10 +77,10 @@
     <section id="packages" class="py-24 bg-dark-950">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <!-- Section Header -->
-            <div class="text-center mb-16">
-                <p class="text-gold-400 text-[10px] md:text-xs tracking-widest uppercase mb-3">Booking</p>
-                <h2 class="font-display text-3xl md:text-5xl font-light tracking-wide">Packages</h2>
-                <div class="w-12 md:w-16 h-px bg-gold-400 mx-auto mt-4 md:mt-6"></div>
+            <div class="text-center mb-16 mt-8">
+                <p class="text-gold-400 text-base md:text-lg tracking-widest uppercase mb-4 font-semibold">Booking</p>
+                <h2 class="font-display text-6xl md:text-8xl lg:text-9xl font-semibold tracking-wide">Packages</h2>
+                <div class="w-20 md:w-32 h-px bg-gold-400 mx-auto mt-6 md:mt-10"></div>
             </div>
 
             @if($packageCategories->count() > 0)
@@ -103,8 +103,8 @@
                                             @if($cat->description)
                                                 <p class="text-gray-300 text-xs mt-2 line-clamp-2">{{ $cat->description }}</p>
                                             @endif
-                                            <p class="text-gold-400 text-[10px] tracking-[0.2em] uppercase mt-1.5">{{ $cat->packages_count }}
-                                                {{ $cat->packages_count > 1 ? 'Packages' : 'Package' }}</p>
+                                            <p class="text-gold-400 font-bold tracking-widest text-sm uppercase">
+                                                {{ $cat->packages_count }} PACKAGES</p>
                                         </div>
                                     </div>
                                 @else
@@ -181,10 +181,10 @@
     <section id="portfolio" class="py-24 bg-dark-900">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <!-- Section Header -->
-            <div class="text-center mb-16">
-                <p class="text-gold-400 text-xs tracking-widest uppercase mb-3">Our Work</p>
-                <h2 class="font-display text-4xl md:text-5xl font-light tracking-wide">Portfolio</h2>
-                <div class="w-16 h-px bg-gold-400 mx-auto mt-6"></div>
+            <div class="text-center mb-16 mt-8">
+                <p class="text-gold-400 text-base md:text-lg tracking-widest uppercase mb-4 font-semibold">Our Work</p>
+                <h2 class="font-display text-6xl md:text-8xl lg:text-9xl font-semibold tracking-wide">Portfolio</h2>
+                <div class="w-20 md:w-32 h-px bg-gold-400 mx-auto mt-6 md:mt-10"></div>
             </div>
 
             <!-- Portfolio Scroll -->
@@ -253,12 +253,12 @@
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="grid lg:grid-cols-2 gap-10 items-center">
                 <!-- Contact Info -->
-                <div>
-                    <p class="text-gold-400 text-xs tracking-widest uppercase mb-3">Get In Touch</p>
-                    <h2 class="font-display text-4xl md:text-5xl font-light tracking-wide mb-6">Contact</h2>
-                    <div class="w-16 h-px bg-gold-400 mb-8"></div>
+                <div class="mb-12">
+                    <p class="text-gold-400 text-base md:text-lg tracking-widest uppercase mb-4 font-semibold">Get In Touch</p>
+                    <h2 class="font-display text-6xl md:text-8xl lg:text-9xl font-semibold tracking-wide mb-6">Contact</h2>
+                    <div class="w-20 md:w-32 h-px bg-gold-400 mb-8 mt-6"></div>
                     <p class="text-gray-400 text-sm leading-relaxed mb-10">
-                        Ready to create beautiful memories? Reach out to us and let's plan your perfect session.
+                        Siap mengabadikan momen berharga Anda? Hubungi kami dan mari rencanakan sesi foto impian yang akan dikenang selamanya.
                     </p>
 
                     <div class="flex flex-wrap items-center gap-6">
@@ -322,9 +322,14 @@
                                 alt="Lead Photographer"
                                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                         @else
-                            <img src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?q=80&w=2070&auto=format&fit=crop"
-                                alt="Lead Photographer"
-                                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            <!-- Elegant Placeholder -->
+                            <div class="w-full h-full relative overflow-hidden bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900 flex flex-col items-center justify-center transition-transform duration-700 group-hover:scale-110">
+                                <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(180,160,100,0.08)_0%,_transparent_70%)] group-hover:bg-[radial-gradient(circle_at_center,_rgba(180,160,100,0.15)_0%,_transparent_70%)] transition-all duration-1000"></div>
+                                <svg class="w-20 h-20 text-gold-400 opacity-20 group-hover:opacity-40 transition-all duration-700 mb-4 z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="0.8">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                                <span class="font-display text-2xl text-gold-400/30 group-hover:text-gold-400/60 tracking-wider z-10 transition-colors duration-500">Photographer</span>
+                            </div>
                         @endif
                         <!-- Hover Overlay -->
                         <div

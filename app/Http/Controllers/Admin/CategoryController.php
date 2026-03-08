@@ -25,13 +25,11 @@ class CategoryController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
-            'sort_order' => 'nullable|integer',
         ]);
 
         $validated['slug'] = Str::slug($validated['name']);
-        $validated['sort_order'] = $validated['sort_order'] ?? 0;
+        $validated['sort_order'] = Category::max('sort_order') + 1;
         $validated['is_active'] = true;
 
         if ($request->hasFile('image')) {
@@ -52,9 +50,7 @@ class CategoryController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
-            'sort_order' => 'nullable|integer',
             'is_active' => 'boolean',
         ]);
 

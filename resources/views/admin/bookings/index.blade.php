@@ -66,7 +66,7 @@
     </div>
 
     <div class="bg-dark-800/50 border border-dark-700 rounded overflow-hidden shadow-sm">
-        <div class="w-full overflow-x-auto scrollbar-thin scrollbar-thumb-dark-700 -mx-px">
+        <div class="w-full overflow-x-auto scrollbar-thin scrollbar-thumb-dark-700">
             <table class="min-w-[800px] w-full">
             <thead>
                 <tr
@@ -112,13 +112,32 @@
                                 {{ number_format($booking->amount_to_pay, 0, ',', '.') }}</p>
                         </td>
                         <td class="px-6 py-4 text-center">
-                            <span
-                                class="px-3 py-1.5 text-[10px] uppercase font-bold tracking-widest bg-emerald-500/5 text-emerald-400/80 border border-emerald-500/10 rounded-full inline-block">
-                                COMPLETED
-                            </span>
+                            @if($booking->status === 'pending')
+                                @if($booking->created_at->diffInMinutes(now()) > 10)
+                                    <span class="px-3 py-1.5 text-[10px] uppercase font-bold tracking-widest bg-red-500/5 text-red-400/80 border border-red-500/10 rounded-full inline-block">
+                                        EXPIRED
+                                    </span>
+                                @else
+                                    <span class="px-3 py-1.5 text-[10px] uppercase font-bold tracking-widest bg-yellow-500/5 text-yellow-400/80 border border-yellow-500/10 rounded-full inline-block">
+                                        PENDING
+                                    </span>
+                                @endif
+                            @elseif($booking->status === 'completed')
+                                <span class="px-3 py-1.5 text-[10px] uppercase font-bold tracking-widest bg-emerald-500/5 text-emerald-400/80 border border-emerald-500/10 rounded-full inline-block">
+                                    COMPLETED
+                                </span>
+                            @else
+                                <span class="px-3 py-1.5 text-[10px] uppercase font-bold tracking-widest bg-gray-500/5 text-gray-400/80 border border-gray-500/10 rounded-full inline-block">
+                                    {{ $booking->status }}
+                                </span>
+                            @endif
                         </td>
                         <td class="px-6 py-3">
                             <div class="flex items-center justify-end gap-3">
+                                <a href="{{ route('admin.bookings.export-invoice', $booking) }}"
+                                    class="text-[10px] uppercase tracking-wider bg-gold-400/10 border border-gold-400/30 text-gold-400 px-3 py-1.5 rounded hover:bg-gold-400/20 transition-all font-bold">
+                                    Cetak Invoice
+                                </a>
                                 <a href="{{ route('admin.bookings.show', $booking) }}"
                                     class="text-[10px] uppercase tracking-wider border border-dark-700 text-gray-400 px-3 py-1.5 rounded hover:bg-dark-700 hover:text-white transition-all">Detail</a>
                                 <form action="{{ route('admin.bookings.destroy', $booking) }}" method="POST"

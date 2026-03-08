@@ -54,19 +54,12 @@
                 @error('image') <span class="text-red-400 text-xs mt-1">{{ $message }}</span> @enderror
             </div>
 
-            <div class="grid grid-cols-2 gap-6">
-                <div>
-                    <label class="block text-xs tracking-widest uppercase text-gray-400 mb-2">Urutan</label>
-                    <input type="number" name="sort_order" value="{{ old('sort_order', $category->sort_order) }}"
-                        class="w-full bg-dark-800/50 border border-dark-700 text-white text-sm px-4 py-3 focus:border-gold-400 focus:ring-0 rounded">
-                </div>
-                <div class="flex items-end pb-1 gap-6">
-                    <label class="flex items-center gap-3">
-                        <input type="checkbox" name="is_active" value="1" {{ $category->is_active ? 'checked' : '' }}
-                            class="rounded bg-dark-800 border-dark-600 text-gold-400 focus:ring-gold-400">
-                        <span class="text-sm text-gray-400">Active</span>
-                    </label>
-                </div>
+            <div>
+                <label class="flex items-center gap-3">
+                    <input type="checkbox" name="is_active" value="1" {{ $category->is_active ? 'checked' : '' }}
+                        class="rounded bg-dark-800 border-dark-600 text-gold-400 focus:ring-gold-400">
+                    <span class="text-sm text-gray-400">Active</span>
+                </label>
             </div>
             <div class="flex gap-3">
                 <button type="submit"

@@ -37,11 +37,7 @@
                 @error('image') <span class="text-red-400 text-xs mt-1">{{ $message }}</span> @enderror
             </div>
 
-            <div>
-                <label class="block text-xs tracking-widest uppercase text-gray-400 mb-2">Urutan</label>
-                <input type="number" name="sort_order" value="{{ old('sort_order', 0) }}"
-                    class="w-full bg-dark-800/50 border border-dark-700 text-white text-sm px-4 py-3 focus:border-gold-400 focus:ring-0 rounded">
-            </div>
+
             <div class="flex gap-3">
                 <button type="submit"
                     class="px-6 py-3 bg-gold-400 text-dark-950 text-xs tracking-widest uppercase font-semibold hover:bg-gold-300 transition-colors rounded">Simpan</button>

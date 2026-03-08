@@ -128,7 +128,7 @@
         </div>
 
         <!-- Main Content -->
-        <div class="flex-1 lg:ml-64">
+        <div class="flex-1 min-w-0 lg:ml-64">
             <!-- Top Bar -->
             <header
                 class="sticky top-0 z-30 bg-dark-950/80 backdrop-blur-md border-b border-dark-800 h-16 flex items-center px-6">

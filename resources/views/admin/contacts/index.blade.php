@@ -3,7 +3,7 @@
 @section('content')
 
     <div class="bg-dark-800/50 border border-dark-700 rounded overflow-hidden">
-        <div class="w-full overflow-x-auto scrollbar-thin scrollbar-thumb-dark-700 -mx-px">
+        <div class="w-full overflow-x-auto scrollbar-thin scrollbar-thumb-dark-700">
             <div class="inline-block min-w-full align-middle">
                 <table class="w-full min-w-[700px]">
                     <thead>
@@ -21,19 +21,23 @@
                                 class="hover:bg-dark-800/30 transition-colors {{ !$contact->is_read ? 'border-l-2 border-l-gold-400' : '' }}">
                                 <td
                                     class="px-6 py-3 text-sm {{ !$contact->is_read ? 'text-white font-medium' : 'text-gray-400' }}">
-                                    {{ $contact->name }}</td>
+                                    {{ $contact->name }}
+                                </td>
                                 <td class="px-6 py-3 text-sm text-gray-400">{{ $contact->email }}</td>
                                 <td class="px-6 py-3 text-sm text-gray-400 max-w-xs truncate">{{ $contact->message }}</td>
                                 <td class="px-6 py-3 text-sm text-gray-500">{{ $contact->created_at->format('d M Y') }}</td>
                                 <td class="px-6 py-3">
-                        <div class="flex items-center gap-3">
-                            <a href="{{ route('admin.contacts.show', $contact) }}" class="text-xs text-gray-400 hover:text-white transition-colors">Baca</a>
-                            <form action="{{ route('admin.contacts.destroy', $contact) }}" method="POST" onsubmit="return confirm('Hapus pesan ini?')">
-                                @csrf @method('DELETE')
-                                <button class="text-xs text-red-400 hover:text-red-300 transition-colors">Hapus</button>
-                            </form>
-                        </div>
-                    </td>
+                                    <div class="flex items-center gap-3">
+                                        <a href="{{ route('admin.contacts.show', $contact) }}"
+                                            class="text-xs text-gray-400 hover:text-white transition-colors">Baca</a>
+                                        <form action="{{ route('admin.contacts.destroy', $contact) }}" method="POST"
+                                            onsubmit="return confirm('Hapus pesan ini?')">
+                                            @csrf @method('DELETE')
+                                            <button
+                                                class="text-xs text-red-400 hover:text-red-300 transition-colors">Hapus</button>
+                                        </form>
+                                    </div>
+                                </td>
                             </tr>
                         @empty
                             <tr>

@@ -26,7 +26,6 @@ class PortfolioController extends Controller
             'title' => 'required|string|max:255',
             'category' => 'nullable|string|max:255',
             'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',
-            'sort_order' => 'nullable|integer',
         ]);
 
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
@@ -38,7 +37,7 @@ class PortfolioController extends Controller
             $validated['image_path'] = $filename;
         }
 
-        $validated['sort_order'] = $validated['sort_order'] ?? 0;
+        $validated['sort_order'] = Portfolio::max('sort_order') + 1;
         $validated['is_active'] = true;
 
         Portfolio::create($validated);
@@ -57,7 +56,6 @@ class PortfolioController extends Controller
             'title' => 'required|string|max:255',
             'category' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
-            'sort_order' => 'nullable|integer',
             'is_active' => 'boolean',
         ]);
 
@@ -77,7 +75,6 @@ class PortfolioController extends Controller
         }
 
         $validated['is_active'] = $request->has('is_active');
-        $validated['sort_order'] = $validated['sort_order'] ?? 0;
 
         $portfolio->update($validated);
 

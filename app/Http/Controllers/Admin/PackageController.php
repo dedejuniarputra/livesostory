@@ -30,9 +30,7 @@ class PackageController extends Controller
             'price' => 'required|numeric|min:0',
             'down_payment' => 'required|numeric|min:0',
             'features' => 'nullable|string',
-            'duration' => 'nullable|string|max:255',
             'is_featured' => 'boolean',
-            'sort_order' => 'nullable|integer',
         ]);
 
         $validated['features'] = $validated['features']
@@ -40,7 +38,7 @@ class PackageController extends Controller
             : [];
 
         $validated['is_featured'] = $request->has('is_featured');
-        $validated['sort_order'] = $validated['sort_order'] ?? 0;
+        $validated['sort_order'] = Package::max('sort_order') + 1;
         $validated['is_active'] = true;
 
         // Keep the old category name in sync just in case it's needed during transition
@@ -70,10 +68,8 @@ class PackageController extends Controller
             'price' => 'required|numeric|min:0',
             'down_payment' => 'required|numeric|min:0',
             'features' => 'nullable|string',
-            'duration' => 'nullable|string|max:255',
             'is_featured' => 'boolean',
             'is_active' => 'boolean',
-            'sort_order' => 'nullable|integer',
         ]);
 
         $validated['features'] = $validated['features']
@@ -93,11 +89,6 @@ class PackageController extends Controller
 
     public function destroy(Package $package)
     {
-        if ($package->item_images) {
-            foreach ($package->item_images as $img) {
-                Storage::disk('public')->delete($img);
-            }
-        }
         $package->delete();
         return redirect()->route('admin.packages.index')->with('success', 'Paket berhasil dihapus!');
     }
