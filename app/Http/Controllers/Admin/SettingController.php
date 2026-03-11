@@ -39,7 +39,7 @@ class SettingController extends Controller
 
             // Handle Hero Image
             if ($request->hasFile('hero_image') && $request->file('hero_image')->isValid()) {
-                $request->validate(['hero_image' => 'image|mimes:jpeg,png,jpg,webp|max:10240']);
+                $request->validate(['hero_image' => 'image|mimes:jpeg,png,jpg,webp|max:51200']);
 
                 $oldImage = Setting::get('hero_image');
                 if (!empty($oldImage) && !str_starts_with($oldImage, 'http')) {
@@ -58,7 +58,7 @@ class SettingController extends Controller
 
             // Handle Contact Image
             if ($request->hasFile('contact_image') && $request->file('contact_image')->isValid()) {
-                $request->validate(['contact_image' => 'image|mimes:jpeg,png,jpg,webp|max:10240']);
+                $request->validate(['contact_image' => 'image|mimes:jpeg,png,jpg,webp|max:51200']);
 
                 $oldImage = Setting::get('contact_image');
                 if (!empty($oldImage) && !str_starts_with($oldImage, 'http')) {

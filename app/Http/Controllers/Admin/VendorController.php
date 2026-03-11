@@ -23,15 +23,15 @@ class VendorController extends Controller
             'custom_package_features' => 'nullable|string',
             'package_price' => 'required|numeric|min:0',
             'name' => 'required|string|max:255',
-            'ig_username' => 'required|string|max:255',
-            'phone' => 'required|numeric|digits_between:10,13',
+            'ig_username' => 'nullable|string|max:255',
+            'phone' => 'nullable|string',
             'booking_date' => 'required|date',
             'booking_time' => 'required|string',
             'payment_type' => 'required|in:lunas,dp',
             'down_payment' => 'required_if:payment_type,dp|numeric|min:0|nullable',
             'location' => 'required|string|max:255',
             'notes' => 'nullable|string',
-            'status' => 'required|in:pending,completed',
+            'status' => 'required|in:completed',
         ]);
 
         // Check if date is available (though admin could theoretically bypass, it's safer to warn/fail if full, or maybe just proceed. Let's strictly check for now, or just allow admin to override? For simplicity, we can let admin override or just check.)

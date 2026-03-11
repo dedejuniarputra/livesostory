@@ -14,6 +14,8 @@ use App\Http\Controllers\Admin\PaymentAccountController;
 use App\Http\Controllers\Admin\ContactController as AdminContactController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\VendorController;
+use App\Http\Controllers\Admin\TeamController;
+use App\Http\Controllers\Admin\SalaryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,7 +64,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Booking Management
     Route::get('/bookings', [AdminBookingController::class, 'index'])->name('bookings.index');
     Route::get('/bookings/export-all-pdf', [AdminBookingController::class, 'exportAllPdf'])->name('bookings.export-all-pdf');
+    Route::get('/bookings/export-excel', [AdminBookingController::class, 'exportExcel'])->name('bookings.export-excel');
     Route::get('/bookings/{booking}/invoice', [AdminBookingController::class, 'exportInvoice'])->name('bookings.export-invoice');
+    Route::get('/bookings/{booking}/edit', [AdminBookingController::class, 'edit'])->name('bookings.edit');
+    Route::put('/bookings/{booking}', [AdminBookingController::class, 'update'])->name('bookings.update');
     Route::get('/bookings/{booking}', [AdminBookingController::class, 'show'])->name('bookings.show');
 
     Route::patch('/bookings/{booking}/status', [AdminBookingController::class, 'updateStatus'])->name('bookings.update-status');
@@ -87,6 +92,14 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/contacts', [AdminContactController::class, 'index'])->name('contacts.index');
     Route::get('/contacts/{contact}', [AdminContactController::class, 'show'])->name('contacts.show');
     Route::delete('/contacts/{contact}', [AdminContactController::class, 'destroy'])->name('contacts.destroy');
+
+    // Team Management
+    Route::get('/team/{team}/report', [TeamController::class, 'report'])->name('team.report');
+    Route::resource('team', TeamController::class);
+
+    // Salary Management
+    Route::get('/salary/{salary}/pdf', [SalaryController::class, 'pdf'])->name('salary.pdf');
+    Route::resource('salary', SalaryController::class);
 
     // Settings
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');

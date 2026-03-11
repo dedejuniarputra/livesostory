@@ -13,7 +13,7 @@
                 <a href="{{ url('/') }}#packages"
                     class="text-xs tracking-widest uppercase text-gray-300 hover:text-gold-400 transition-colors duration-300">Booking</a>
                 <a href="{{ url('/') }}#portfolio"
-                    class="text-xs tracking-widest uppercase text-gray-300 hover:text-gold-400 transition-colors duration-300">Portfolio</a>
+                    class="text-xs tracking-widest uppercase text-gray-300 hover:text-gold-400 transition-colors duration-300">Portofolio</a>
                 <a href="{{ url('/') }}#contact"
                     class="text-xs tracking-widest uppercase text-gray-300 hover:text-gold-400 transition-colors duration-300">Contact</a>
                 @auth
@@ -49,7 +49,7 @@
             <a href="{{ url('/') }}#home"
                 class="block text-xs tracking-widest uppercase text-gray-300 hover:text-gold-400 transition-colors">Home</a>
             <a href="{{ url('/') }}#portfolio"
-                class="block text-xs tracking-widest uppercase text-gray-300 hover:text-gold-400 transition-colors">Portfolio</a>
+                class="block text-xs tracking-widest uppercase text-gray-300 hover:text-gold-400 transition-colors">Portofolio</a>
             <a href="{{ url('/') }}#packages"
                 class="block text-xs tracking-widest uppercase text-gray-300 hover:text-gold-400 transition-colors">Booking</a>
             <a href="{{ url('/') }}#contact"

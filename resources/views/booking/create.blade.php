@@ -77,8 +77,8 @@
                         </div>
                         <div>
                             <label class="block text-xs tracking-widest uppercase text-gray-400 mb-2">Nama IG / Link IG
-                                anda *</label>
-                            <input type="text" name="ig_username" value="{{ old('ig_username') }}" required
+                                anda (Opsional)</label>
+                            <input type="text" name="ig_username" value="{{ old('ig_username') }}"
                                 placeholder="Contoh: @budi_santoso atau instagram.com/budi_santoso"
                                 class="w-full bg-dark-800/50 border border-dark-700 text-white text-sm px-5 py-3.5 focus:border-gold-400 focus:ring-0 transition-colors">
                         </div>
@@ -87,10 +87,9 @@
                     <div class="grid md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-xs tracking-widest uppercase text-gray-400 mb-2">NO TELPON
-                                *</label>
-                            <input type="tel" name="phone" value="{{ old('phone') }}" required maxlength="13"
-                                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                                placeholder="Contoh: 081234567890"
+                                (Opsional)</label>
+                            <input type="text" name="phone" value="{{ old('phone') }}" maxlength="15"
+                                placeholder="Contoh: 081234567890 atau -"
                                 class="w-full bg-dark-800/50 border border-dark-700 text-white text-sm px-5 py-3.5 focus:border-gold-400 focus:ring-0 transition-colors">
                         </div>
                         <div>
@@ -207,7 +206,7 @@
                             </div>
                             <div class="flex items-center gap-2">
                                 <div class="w-3 h-3 bg-red-500/20 border border-red-500/40 rounded-sm"></div>
-                                <span>Penuh / Libur</span>
+                                <span>Penuh</span>
                             </div>
                             <div class="flex items-center gap-2">
                                 <div class="w-3 h-3 bg-gold-400 rounded-sm"></div>
@@ -299,7 +298,7 @@
                 if (isPast) {
                     statusText = '';
                 } else if (dayData.is_blocked || (dayData.total_slots > 0 && dayData.remaining_slots <= 0)) {
-                    const blockMsg = dayData.is_blocked ? 'Libur' : 'Penuh';
+                    const blockMsg = 'Penuh';
                     const weightClass = 'font-black tracking-tight';
                     statusText = `<span class="text-[8px] md:text-[10px] uppercase ${weightClass} text-red-500 mt-1 md:mt-2">${blockMsg}</span>`;
                 } else if (isAvailable) {

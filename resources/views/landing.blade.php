@@ -44,28 +44,28 @@
         </div>
 
         <!-- Content -->
-        <div class="relative z-10 text-center px-6 max-w-4xl mx-auto">
+        <div class="relative z-10 text-center px-6 max-w-7xl mx-auto w-full">
             <h1
-                class="font-display text-4xl sm:text-7xl md:text-8xl lg:text-9xl font-light tracking-tight sm:tracking-ultra-wide mb-6 animate-fade-in text-gold-gradient leading-tight">
+                class="font-display text-5xl min-[400px]:text-[13.5vw] sm:text-7xl md:text-9xl lg:text-[11rem] font-black tracking-[-0.08em] sm:tracking-ultra-wide mb-4 md:mb-6 animate-fade-in text-gold-gradient transition-all duration-300 leading-none whitespace-nowrap px-2">
                 {{ $settings['hero_title'] }}
             </h1>
             <p
-                class="font-display text-2xl md:text-3xl lg:text-4xl italic text-gold-300 mb-8 animate-fade-in-delay-1 animate-float">
+                class="font-display text-xl md:text-3xl lg:text-4xl italic text-gold-300 mb-8 md:mb-12 animate-fade-in-delay-1 animate-float px-4 sm:px-0">
                 {{ $settings['hero_subtitle'] }}
             </p>
 
-            <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center animate-fade-in-delay-3 mt-12 md:mt-20 px-4 sm:px-0">
-                <a href="#packages" class="btn-gold w-full sm:w-auto">
+            <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center animate-fade-in-delay-3 mt-8 md:mt-20">
+                <a href="#packages" class="btn-gold w-full max-w-[280px] sm:max-w-none sm:w-auto">
                     Book A Session
                 </a>
-                <a href="#portfolio" class="btn-outline w-full sm:w-auto">
-                    View Portfolio
+                <a href="#portfolio" class="btn-outline w-full max-w-[280px] sm:max-w-none sm:w-auto">
+                    View Portofolio
                 </a>
             </div>
         </div>
 
         <!-- Scroll Indicator -->
-        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
+        <div class="absolute bottom-10 inset-x-0 flex justify-center animate-bounce z-20">
             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                     d="M19 14l-7 7m0 0l-7-7m7 7V3" />
@@ -183,7 +183,7 @@
             <!-- Section Header -->
             <div class="text-center mb-16 mt-8">
                 <p class="text-gold-400 text-base md:text-lg tracking-widest uppercase mb-4 font-semibold">Our Work</p>
-                <h2 class="font-display text-6xl md:text-8xl lg:text-9xl font-semibold tracking-wide">Portfolio</h2>
+                <h2 class="font-display text-6xl md:text-8xl lg:text-9xl font-semibold tracking-wide">Portofolio</h2>
                 <div class="w-20 md:w-32 h-px bg-gold-400 mx-auto mt-6 md:mt-10"></div>
             </div>
 

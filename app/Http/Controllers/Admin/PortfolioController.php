@@ -25,7 +25,7 @@ class PortfolioController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'category' => 'nullable|string|max:255',
-            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',
+            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:51200',
         ]);
 
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
@@ -55,7 +55,7 @@ class PortfolioController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'category' => 'nullable|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:51200',
             'is_active' => 'boolean',
         ]);
 

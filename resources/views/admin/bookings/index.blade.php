@@ -14,7 +14,7 @@
                 </div>
                 <div>
                     <div class="text-xl font-bold text-emerald-400">Rp {{ number_format($totalOmset, 0, ',', '.') }}</div>
-                    <div class="text-[10px] text-emerald-500/60 uppercase tracking-widest font-bold">Total Omset (Terfilter)
+                    <div class="text-[10px] text-emerald-500/60 uppercase tracking-widest font-bold">Omset Bulanan (Terfilter)
                     </div>
                 </div>
             </div>
@@ -47,6 +47,14 @@
 
         <!-- Actions -->
         <div class="flex items-center gap-3 w-full lg:w-auto">
+            <a href="{{ route('admin.bookings.export-excel', request()->query()) }}"
+                class="flex-1 lg:flex-none px-4 py-2.5 bg-dark-800 border border-dark-700 text-white text-[10px] md:text-xs tracking-widest uppercase font-bold hover:bg-dark-700 rounded flex items-center justify-center gap-2 transition-colors">
+                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                Export Excel
+            </a>
             <a href="{{ route('admin.bookings.export-all-pdf', request()->query()) }}"
                 class="flex-1 lg:flex-none px-4 py-2.5 bg-dark-800 border border-dark-700 text-white text-[10px] md:text-xs tracking-widest uppercase font-bold hover:bg-dark-700 rounded flex items-center justify-center gap-2 transition-colors">
                 <svg class="w-4 h-4 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -71,6 +79,7 @@
             <thead>
                 <tr
                     class="text-[10px] md:text-xs text-gray-500 uppercase tracking-widest border-b border-dark-700 bg-dark-900/40">
+                    <th class="text-left px-4 py-4 whitespace-nowrap font-bold w-10">No</th>
                     <th class="text-left px-6 py-4 whitespace-nowrap font-bold">Client</th>
                     <th class="text-left px-6 py-4 whitespace-nowrap font-bold">IG</th>
                     <th class="text-left px-6 py-4 whitespace-nowrap font-bold">Package</th>
@@ -83,6 +92,9 @@
             <tbody class="divide-y divide-dark-800">
                 @forelse($bookings as $booking)
                     <tr class="hover:bg-dark-800/30 transition-colors group">
+                        <td class="px-4 py-4 whitespace-nowrap text-center text-xs text-gray-500 font-medium">
+                            {{ ($bookings->currentPage() - 1) * $bookings->perPage() + $loop->iteration }}
+                        </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center gap-3">
                                 <div
@@ -148,6 +160,8 @@
                                     class="text-[10px] uppercase tracking-wider bg-gold-400/10 border border-gold-400/30 text-gold-400 px-3 py-1.5 rounded hover:bg-gold-400/20 transition-all font-bold">
                                     Cetak Invoice
                                 </a>
+                                <a href="{{ route('admin.bookings.edit', $booking) }}"
+                                    class="text-[10px] uppercase tracking-wider border border-dark-700 text-gold-400 px-3 py-1.5 rounded hover:bg-dark-700 hover:text-white transition-all">Edit</a>
                                 <a href="{{ route('admin.bookings.show', $booking) }}"
                                     class="text-[10px] uppercase tracking-wider border border-dark-700 text-gray-400 px-3 py-1.5 rounded hover:bg-dark-700 hover:text-white transition-all">Detail</a>
                                 <form action="{{ route('admin.bookings.destroy', $booking) }}" method="POST"
@@ -161,7 +175,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="px-6 py-8 text-center text-gray-500 text-sm">Belum ada booking.</td>
+                        <td colspan="8" class="px-6 py-8 text-center text-gray-500 text-sm">Belum ada booking.</td>
                     </tr>
                 @endforelse
             </tbody>
@@ -169,6 +183,55 @@
         </div>
     </div>
 
-        <div class="mt-4">{{ $bookings->links() }}</div>
+    {{-- Pagination --}}
+    @if($bookings->hasPages())
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6">
+        {{-- Info --}}
+        <p class="text-xs text-gray-500">
+            Menampilkan
+            <span class="text-white font-semibold">{{ $bookings->firstItem() }}</span>–<span class="text-white font-semibold">{{ $bookings->lastItem() }}</span>
+            dari
+            <span class="text-white font-semibold">{{ $bookings->total() }}</span>
+            data
+        </p>
+
+        {{-- Page Buttons --}}
+        <div class="flex items-center gap-1">
+            {{-- Previous --}}
+            @if($bookings->onFirstPage())
+                <span class="px-3 py-1.5 text-[11px] rounded border border-dark-700 text-gray-600 cursor-not-allowed select-none">&lsaquo;</span>
+            @else
+                <a href="{{ $bookings->appends(request()->query())->previousPageUrl() }}"
+                   class="px-3 py-1.5 text-[11px] rounded border border-dark-700 text-gray-400 hover:bg-dark-700 hover:text-white transition-colors">&lsaquo;</a>
+            @endif
+
+            {{-- Page Numbers --}}
+            @foreach($bookings->appends(request()->query())->getUrlRange(1, $bookings->lastPage()) as $page => $url)
+                @if($page == $bookings->currentPage())
+                    <span class="px-3 py-1.5 text-[11px] rounded bg-gold-400 text-dark-950 font-bold cursor-default">{{ $page }}</span>
+                @else
+                    <a href="{{ $url }}"
+                       class="px-3 py-1.5 text-[11px] rounded border border-dark-700 text-gray-400 hover:bg-dark-700 hover:text-white transition-colors">{{ $page }}</a>
+                @endif
+            @endforeach
+
+            {{-- Next --}}
+            @if($bookings->hasMorePages())
+                <a href="{{ $bookings->appends(request()->query())->nextPageUrl() }}"
+                   class="px-3 py-1.5 text-[11px] rounded border border-dark-700 text-gray-400 hover:bg-dark-700 hover:text-white transition-colors">&rsaquo;</a>
+            @else
+                <span class="px-3 py-1.5 text-[11px] rounded border border-dark-700 text-gray-600 cursor-not-allowed select-none">&rsaquo;</span>
+            @endif
+        </div>
+    </div>
+    @else
+    <div class="mt-4">
+        <p class="text-xs text-gray-500">
+            Total
+            <span class="text-white font-semibold">{{ $bookings->total() }}</span>
+            data
+        </p>
+    </div>
+    @endif
 
 @endsection

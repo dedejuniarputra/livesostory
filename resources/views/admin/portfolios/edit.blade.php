@@ -1,5 +1,5 @@
 @extends('admin.layout')
-@section('header', 'Edit Portfolio')
+@section('header', 'Edit Portofolio')
 @section('content')
 
     <div class="max-w-2xl">

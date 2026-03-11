@@ -19,7 +19,7 @@
                     <div class="text-xl md:text-3xl font-bold mb-0.5 text-blue-400">
                         {{ number_format($stats['total_bookings']) }}
                     </div>
-                    <div class="text-[10px] text-blue-500/60 uppercase tracking-widest font-bold">Total Pesanan</div>
+                    <div class="text-[10px] text-blue-500/60 uppercase tracking-widest font-bold">Pesanan Bulan Ini</div>
                 </div>
             </div>
         </div>
@@ -39,7 +39,7 @@
                     <div class="text-xl md:text-3xl font-bold mb-0.5 text-emerald-400 truncate">Rp
                         {{ number_format($stats['total_revenue'], 0, ',', '.') }}
                     </div>
-                    <div class="text-[10px] text-emerald-500/60 uppercase tracking-widest font-bold">Total Omset</div>
+                    <div class="text-[10px] text-emerald-500/60 uppercase tracking-widest font-bold">Omset Bulan Ini</div>
                 </div>
             </div>
         </div>
@@ -88,7 +88,7 @@
     <!-- Recent Bookings -->
     <div class="bg-dark-800/50 border border-dark-700 rounded overflow-hidden">
         <div class="px-6 py-4 border-b border-dark-700 flex items-center justify-between">
-            <h3 class="text-xs md:text-sm font-medium text-white uppercase tracking-wider">Pesanan Terakhir</h3>
+            <h3 class="text-xs md:text-sm font-medium text-white uppercase tracking-wider">Pesanan Bulan Ini</h3>
             <a href="{{ route('admin.bookings.index') }}"
                 class="text-[10px] md:text-xs text-gold-400 hover:text-gold-300">Lihat Semua
                 →</a>
@@ -98,6 +98,7 @@
                 <thead>
                     <tr
                         class="text-[10px] md:text-xs text-gray-500 uppercase tracking-widest border-b border-dark-700 bg-dark-900/40">
+                        <th class="px-4 py-4 text-left font-bold w-10">No</th>
                         <th class="px-6 py-4 text-left font-bold">Client</th>
                         <th class="px-6 py-4 text-left font-bold">IG</th>
                         <th class="px-6 py-4 text-left font-bold">Package</th>
@@ -109,6 +110,9 @@
                 <tbody class="divide-y divide-dark-800">
                     @forelse($recentBookings as $booking)
                         <tr class="hover:bg-dark-800/30 transition-colors group">
+                            <td class="px-4 py-4 whitespace-nowrap text-center text-xs text-gray-500 font-medium">
+                                {{ ($recentBookings->currentPage() - 1) * $recentBookings->perPage() + $loop->iteration }}
+                            </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center gap-3">
                                     <div
@@ -148,12 +152,60 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-6 py-12 text-center text-gray-500 text-sm">Belum ada booking.</td>
+                            <td colspan="7" class="px-6 py-12 text-center text-gray-500 text-sm">Belum ada booking bulan ini.
+                            </td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
+
+        {{-- Pagination --}}
+        @if($recentBookings->hasPages())
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 px-6 py-4 border-t border-dark-700">
+                {{-- Info --}}
+                <p class="text-xs text-gray-500">
+                    Menampilkan
+                    <span class="text-white font-semibold">{{ $recentBookings->firstItem() }}</span>–<span
+                        class="text-white font-semibold">{{ $recentBookings->lastItem() }}</span>
+                    dari
+                    <span class="text-white font-semibold">{{ $recentBookings->total() }}</span>
+                    data bulan ini
+                </p>
+
+                {{-- Page Buttons --}}
+                <div class="flex items-center gap-1">
+                    {{-- Previous --}}
+                    @if($recentBookings->onFirstPage())
+                        <span
+                            class="px-3 py-1.5 text-[11px] rounded border border-dark-700 text-gray-600 cursor-not-allowed select-none">&lsaquo;</span>
+                    @else
+                        <a href="{{ $recentBookings->previousPageUrl() }}"
+                            class="px-3 py-1.5 text-[11px] rounded border border-dark-700 text-gray-400 hover:bg-dark-700 hover:text-white transition-colors">&lsaquo;</a>
+                    @endif
+
+                    {{-- Page Numbers --}}
+                    @foreach($recentBookings->getUrlRange(1, $recentBookings->lastPage()) as $page => $url)
+                        @if($page == $recentBookings->currentPage())
+                            <span
+                                class="px-3 py-1.5 text-[11px] rounded bg-gold-400 text-dark-950 font-bold cursor-default">{{ $page }}</span>
+                        @else
+                            <a href="{{ $url }}"
+                                class="px-3 py-1.5 text-[11px] rounded border border-dark-700 text-gray-400 hover:bg-dark-700 hover:text-white transition-colors">{{ $page }}</a>
+                        @endif
+                    @endforeach
+
+                    {{-- Next --}}
+                    @if($recentBookings->hasMorePages())
+                        <a href="{{ $recentBookings->nextPageUrl() }}"
+                            class="px-3 py-1.5 text-[11px] rounded border border-dark-700 text-gray-400 hover:bg-dark-700 hover:text-white transition-colors">&rsaquo;</a>
+                    @else
+                        <span
+                            class="px-3 py-1.5 text-[11px] rounded border border-dark-700 text-gray-600 cursor-not-allowed select-none">&rsaquo;</span>
+                    @endif
+                </div>
+            </div>
+        @endif
     </div>
     </div>
 

@@ -46,18 +46,10 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Status Pesanan *</label>
-                    <div class="relative">
-                        <select name="status" required
-                            class="w-full bg-dark-950 border border-dark-800 text-white text-sm px-4 py-3 focus:border-gold-400 focus:ring-0 transition-colors appearance-none">
-                            <option value="completed" selected>Completed (Selesai/Lunas/Sudah DP)</option>
-                            <option value="pending" {{ old('status') === 'pending' ? 'selected' : '' }}>Pending (Menunggu)</option>
-                        </select>
-                        <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </div>
+                    <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Status Pesanan</label>
+                    <input type="hidden" name="status" value="completed">
+                    <div class="w-full bg-dark-950/50 border border-dark-800 text-gold-400 text-sm px-4 py-3 cursor-not-allowed">
+                        Completed (Selesai/Lunas/Sudah DP)
                     </div>
                 </div>
             </div>
@@ -71,8 +63,8 @@
                         placeholder="Nama Lengkap Klien">
                 </div>
                 <div>
-                    <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Username IG *</label>
-                    <input type="text" name="ig_username" value="{{ old('ig_username') }}" required
+                    <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Username IG (Opsional)</label>
+                    <input type="text" name="ig_username" value="{{ old('ig_username') }}"
                         class="w-full bg-dark-950 border border-dark-800 text-white text-sm px-4 py-3 focus:border-gold-400 focus:ring-0 transition-colors placeholder-dark-600"
                         placeholder="@usernameig">
                 </div>
@@ -80,12 +72,11 @@
 
             <div class="grid md:grid-cols-2 gap-6">
                 <div>
-                    <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">No Telp / WA *</label>
-                    <input type="text" name="phone" value="{{ old('phone') }}" required
-                        maxlength="13" pattern="\d*" inputmode="numeric"
-                        oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+                    <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">No Telp / WA (Opsional)</label>
+                    <input type="text" name="phone" value="{{ old('phone') }}"
+                        maxlength="15"
                         class="w-full bg-dark-950 border border-dark-800 text-white text-sm px-4 py-3 focus:border-gold-400 focus:ring-0 transition-colors placeholder-dark-600"
-                        placeholder="Contoh: 0812345678901">
+                        placeholder="Contoh: 0812345678901 atau -">
                 </div>
                 <div>
                     <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Lokasi *</label>
@@ -143,7 +134,7 @@
                         </div>
                         <div class="flex items-center gap-2">
                             <div class="w-3 h-3 bg-red-500/20 border border-red-500/40 rounded-sm"></div>
-                            <span>Penuh / Libur</span>
+                            <span>Penuh</span>
                         </div>
                         <div class="flex items-center gap-2">
                             <div class="w-3 h-3 bg-gold-400 rounded-sm"></div>
@@ -287,7 +278,7 @@
             if (isPast) {
                 statusText = '';
             } else if (dayData.is_blocked || (dayData.total_slots > 0 && dayData.remaining_slots <= 0)) {
-                const blockMsg = dayData.is_blocked ? 'Libur' : 'Penuh';
+                const blockMsg = 'Penuh';
                 const weightClass = 'font-black tracking-tight';
                 statusText = `<span class="text-[8px] md:text-[10px] uppercase ${weightClass} text-red-500 mt-1 md:mt-2">${blockMsg}</span>`;
             } else if (isAvailable) {

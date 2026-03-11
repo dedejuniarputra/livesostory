@@ -68,7 +68,7 @@
                 <input type="hidden" name="slots" value="0">
                 <div>
                     <label class="block text-xs tracking-widest uppercase text-gray-400 mb-2">Pilih Tanggal
-                        Libur/Tutup</label>
+                        Penuh</label>
                     <input type="text" id="datepicker" name="dates" value="{{ old('dates') }}"
                         placeholder="Pilih satu atau beberapa tanggal" required
                         class="w-full bg-dark-800 border border-dark-600 text-white text-sm px-4 py-3 focus:border-gold-400 focus:ring-0 rounded border-red-500/30">
@@ -110,7 +110,7 @@
                                 <p class="text-sm">{{ $blocked->date->format('d F Y') }}</p>
                                 @if($blocked->slots == 0)
                                     <span
-                                        class="px-1.5 py-0.5 bg-red-500/20 text-red-400 text-[10px] uppercase tracking-tighter rounded">Tutup</span>
+                                        class="px-1.5 py-0.5 bg-red-500/20 text-red-400 text-[10px] uppercase tracking-tighter rounded">Penuh</span>
                                 @else
                                     <span
                                         class="px-1.5 py-0.5 bg-gold-400/20 text-gold-400 text-[10px] uppercase tracking-tighter rounded">{{ $blocked->slots }}
@@ -193,8 +193,8 @@
                         @endphp
 
                         <div class="calendar-day aspect-square relative flex flex-col items-center justify-center p-1 md:p-2 transition-all duration-200 group
-                                                                                    {{ $isPast ? 'bg-dark-900/40 opacity-40 cursor-default' : ($isBlocked ? 'bg-red-500/20' : 'bg-dark-900') }}
-                                                                                    {{ $isPast ? '' : 'cursor-pointer hover:bg-dark-800' }}"
+                                                                                            {{ $isPast ? 'bg-dark-900/40 opacity-40 cursor-default' : ($isBlocked ? 'bg-red-500/20' : 'bg-dark-900') }}
+                                                                                            {{ $isPast ? '' : 'cursor-pointer hover:bg-dark-800' }}"
                             id="cell-{{ $dateStr }}" @if(!$isPast) onclick="toggleDateSelection('{{ $dateStr }}', event)"
                             @endif>
 
@@ -205,7 +205,7 @@
                                 class="mt-1 md:mt-2 flex flex-col items-center flex-1 justify-end pb-0.5 md:pb-1 w-full pointer-events-none">
                                 @if($isBlocked)
                                     <span
-                                        class="text-[8px] md:text-[10px] uppercase font-black tracking-wider text-red-500">Libur</span>
+                                        class="text-[8px] md:text-[10px] uppercase font-black tracking-wider text-red-500">Penuh</span>
                                 @elseif($isFull)
                                     <span
                                         class="text-[8px] md:text-[10px] uppercase font-black tracking-tight text-red-400">Penuh</span>
@@ -242,7 +242,7 @@
                 </div>
                 <div class="flex items-center gap-2">
                     <div class="w-3 h-3 bg-red-500/20 border border-red-500/30 rounded-sm"></div>
-                    <span>Penuh / Libur</span>
+                    <span>Penuh</span>
                 </div>
                 <div class="flex items-center gap-2">
                     <div class="w-3 h-3 bg-gold-400 rounded-sm"></div>
@@ -257,15 +257,12 @@
 
     @push('styles')
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
         <style>
             .flatpickr-calendar {
-                background: #1a1a1a !important;
+                background: #111111 !important;
                 border: 1px solid #333 !important;
-                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
-            }
-
-            .flatpickr-day {
-                color: #ccc !important;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
             }
 
             .flatpickr-day.selected {
