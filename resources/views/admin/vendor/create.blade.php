@@ -257,27 +257,26 @@
             const isToday = dateObj.getTime() === today.getTime();
 
             const dayData = datesData[dateStr] || { remaining_slots: 0, total_slots: 0, is_blocked: false };
-            const isAvailable = !isPast && (dayData.remaining_slots > 0 && !dayData.is_blocked);
+            // Admin can bypass `isPast` restriction
+            const isAvailable = (dayData.remaining_slots > 0 && !dayData.is_blocked);
             const isSelected = selectedDate === dateStr;
 
             let classes = 'aspect-square relative flex flex-col items-center justify-center p-1 md:p-2 transition-all duration-200 group ';
             let statusText = '';
 
-            if (isPast) {
-                classes += 'bg-dark-900/40 opacity-40 cursor-default';
-            } else if (isSelected) {
+            if (isSelected) {
                 classes += 'bg-gold-400 text-dark-950 font-semibold cursor-pointer';
-            } else if (dayData.is_blocked && !isPast) {
+            } else if (dayData.is_blocked) {
                 classes += 'bg-red-500/20 cursor-not-allowed';
+            } else if (isPast) {
+                classes += 'bg-dark-900/60 opacity-80 cursor-pointer hover:bg-dark-800'; // Make past date slightly faded but clickable
             } else {
                 classes += 'bg-dark-900 cursor-pointer hover:bg-dark-800';
             }
 
-            const dayNumberClass = isToday ? 'text-gold-400 font-black' : (isSelected ? 'text-dark-950' : (dayData.is_blocked && !isPast ? 'text-red-500 font-black' : 'text-gray-300'));
+            const dayNumberClass = isToday ? 'text-gold-400 font-black' : (isSelected ? 'text-dark-950' : (dayData.is_blocked ? 'text-red-500 font-black' : 'text-gray-300'));
 
-            if (isPast) {
-                statusText = '';
-            } else if (dayData.is_blocked || (dayData.total_slots > 0 && dayData.remaining_slots <= 0)) {
+            if (dayData.is_blocked || (dayData.total_slots > 0 && dayData.remaining_slots <= 0)) {
                 const blockMsg = 'Penuh';
                 const weightClass = 'font-black tracking-tight';
                 statusText = `<span class="text-[8px] md:text-[10px] uppercase ${weightClass} text-red-500 mt-1 md:mt-2">${blockMsg}</span>`;
@@ -288,7 +287,7 @@
             }
 
             html += `
-                <div class="${classes}" ${isAvailable ? `onclick="selectDate('${dateStr}', ${day})"` : ''}>
+                <div class="${classes}" ${isAvailable || isPast ? `onclick="selectDate('${dateStr}', ${day})"` : ''}>
                     <span class="${dayNumberClass} text-xs md:text-sm font-light group-hover:text-white transition-colors h-5 md:h-6 flex items-center justify-center">${day}</span>
                     <div class="mt-1 md:mt-2 flex flex-col items-center flex-1 justify-end pb-0.5 md:pb-1 w-full text-center">
                         ${statusText}

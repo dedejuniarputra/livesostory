@@ -249,7 +249,8 @@
                 const isToday = dateObj.getTime() === today.getTime();
 
                 const dayData = datesData[dateStr] || { remaining_slots: 0, total_slots: 0, is_blocked: false };
-                const isAvailable = !isPast && (dayData.total_slots === 0 || (dayData.remaining_slots > 0 && !dayData.is_blocked));
+                // Allow admin to bypass `isPast` restriction
+                const isAvailable = (dayData.total_slots === 0 || (dayData.remaining_slots > 0 && !dayData.is_blocked));
                 const isSelected = selectedDate === dateStr;
 
                 let classes = 'aspect-square relative flex flex-col items-center justify-center p-1 md:p-2 transition-all duration-200 group ';
@@ -257,29 +258,27 @@
 
                 if (isSelected) {
                     classes += 'bg-gold-400 text-dark-950 font-semibold cursor-pointer';
-                } else if (isPast) {
-                    classes += 'bg-dark-900/40 opacity-40 cursor-default';
                 } else if (dayData.is_blocked) {
                     classes += 'bg-red-500/20 cursor-not-allowed';
+                } else if (isPast) {
+                    classes += 'bg-dark-900/60 opacity-80 cursor-pointer hover:bg-dark-800'; // Make past date slightly faded but clickable
                 } else {
                     classes += 'bg-dark-900 cursor-pointer hover:bg-dark-800';
                 }
 
-                const dayNumberClass = isSelected ? 'text-dark-950' : (isToday ? 'text-gold-400 font-black' : (dayData.is_blocked && !isPast ? 'text-red-500 font-black' : 'text-gray-300'));
+                const dayNumberClass = isSelected ? 'text-dark-950' : (isToday ? 'text-gold-400 font-black' : (dayData.is_blocked ? 'text-red-500 font-black' : 'text-gray-300'));
 
-                if (!isPast) {
-                    if (dayData.is_blocked || (dayData.total_slots > 0 && dayData.remaining_slots <= 0)) {
-                        const blockMsg = 'Penuh';
-                        statusText = `<span class="text-[8px] md:text-[10px] uppercase font-black text-red-500 mt-1 md:mt-2">${blockMsg}</span>`;
-                    } else if (dayData.total_slots > 0 && dayData.remaining_slots > 0) {
-                        statusText = `
-                            <span class="text-xs md:text-sm font-black text-green-400 transition-colors leading-none">${dayData.remaining_slots}</span>
-                            <span class="text-[6px] md:text-[7px] uppercase font-bold tracking-tighter text-gray-500 -mt-0.5 md:-mt-1 group-hover:text-gray-400 transition-colors">Slot</span>`;
-                    }
+                if (dayData.is_blocked || (dayData.total_slots > 0 && dayData.remaining_slots <= 0)) {
+                    const blockMsg = 'Penuh';
+                    statusText = `<span class="text-[8px] md:text-[10px] uppercase font-black text-red-500 mt-1 md:mt-2">${blockMsg}</span>`;
+                } else if (dayData.total_slots > 0 && dayData.remaining_slots > 0) {
+                    statusText = `
+                        <span class="text-xs md:text-sm font-black text-green-400 transition-colors leading-none">${dayData.remaining_slots}</span>
+                        <span class="text-[6px] md:text-[7px] uppercase font-bold tracking-tighter text-gray-500 -mt-0.5 md:-mt-1 group-hover:text-gray-400 transition-colors">Slot</span>`;
                 }
 
                 html += `
-                    <div class="${classes}" ${(!isPast && !dayData.is_blocked) || isSelected ? `onclick="selectDate('${dateStr}', ${day})"` : ''}>
+                    <div class="${classes}" ${(!dayData.is_blocked) || isSelected ? `onclick="selectDate('${dateStr}', ${day})"` : ''}>
                         <span class="${dayNumberClass} text-xs md:text-sm font-light group-hover:text-white transition-colors h-5 md:h-6 flex items-center justify-center">${day}</span>
                         <div class="mt-1 md:mt-2 flex flex-col items-center flex-1 justify-end pb-0.5 md:pb-1 w-full text-center">
                             ${statusText}

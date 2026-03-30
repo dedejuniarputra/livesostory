@@ -36,7 +36,7 @@
         <div class="absolute inset-0">
             @if($settings['hero_image'])
                 <img src="{{ str_starts_with($settings['hero_image'], 'http') ? $settings['hero_image'] : asset('storage/' . $settings['hero_image']) }}"
-                    alt="Hero Background" class="w-full h-full object-cover">
+                    alt="Hero Background" class="w-full h-full object-cover" decoding="async">
             @else
                 <div class="w-full h-full bg-gradient-to-br from-dark-900 via-dark-950 to-black"></div>
             @endif
@@ -94,7 +94,7 @@
                                 @if($cat->image)
                                     <!-- With Image -->
                                     <img src="{{ asset('storage/' . $cat->image) }}" alt="{{ $cat->name }}"
-                                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" decoding="async">
                                     <div
                                         class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500">
                                         <div class="absolute bottom-0 left-0 right-0 p-6">
@@ -156,13 +156,13 @@
                     </div>
 
                     <!-- Scroll Navigation Arrows -->
-                    <button onclick="scrollCategories(-1)"
+                    <button onclick="scrollCategories(-1)" aria-label="Previous category"
                         class="absolute left-0 lg:-left-6 top-1/2 -translate-y-1/2 z-30 w-12 h-12 flex items-center justify-center border border-dark-700 text-gold-400 bg-dark-950/80 hover:bg-gold-400 hover:text-dark-950 transition-all duration-300 opacity-0 group-hover/nav:opacity-100 hidden md:flex">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19l-7-7 7-7" />
                         </svg>
                     </button>
-                    <button onclick="scrollCategories(1)"
+                    <button onclick="scrollCategories(1)" aria-label="Next category"
                         class="absolute right-0 lg:-right-6 top-1/2 -translate-y-1/2 z-30 w-12 h-12 flex items-center justify-center border border-dark-700 text-gold-400 bg-dark-950/80 hover:bg-gold-400 hover:text-dark-950 transition-all duration-300 opacity-0 group-hover/nav:opacity-100 hidden md:flex">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7" />
@@ -197,7 +197,7 @@
                                 class="group flex-shrink-0 w-[280px] md:w-[300px] lg:w-[340px] relative overflow-hidden rounded category-card aspect-[4/5] snap-start block">
                                 <img src="{{ \Illuminate\Support\Str::startsWith($portfolio->image_path, ['http://', 'https://']) ? $portfolio->image_path : asset('storage/' . $portfolio->image_path) }}"
                                     alt="{{ $portfolio->title }}"
-                                    class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                                    class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" decoding="async">
                                 <div
                                     class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-end">
                                     <div class="p-6 translate-y-3 group-hover:translate-y-0 transition-all duration-500 w-full">
@@ -232,13 +232,13 @@
                 @endif
 
                 <!-- Scroll Navigation Arrows -->
-                <button onclick="scrollPortfolio(-1)"
+                <button onclick="scrollPortfolio(-1)" aria-label="Previous portfolio"
                     class="absolute left-0 lg:-left-6 top-1/2 -translate-y-1/2 z-30 w-12 h-12 flex items-center justify-center border border-dark-700 text-gold-400 bg-dark-950/80 hover:bg-gold-400 hover:text-dark-950 transition-all duration-300 opacity-0 group-hover/nav:opacity-100 hidden md:flex">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19l-7-7 7-7" />
                     </svg>
                 </button>
-                <button onclick="scrollPortfolio(1)"
+                <button onclick="scrollPortfolio(1)" aria-label="Next portfolio"
                     class="absolute right-0 lg:-right-6 top-1/2 -translate-y-1/2 z-30 w-12 h-12 flex items-center justify-center border border-dark-700 text-gold-400 bg-dark-950/80 hover:bg-gold-400 hover:text-dark-950 transition-all duration-300 opacity-0 group-hover/nav:opacity-100 hidden md:flex">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7" />
@@ -320,7 +320,7 @@
                         @if(!empty($settings['contact_image']))
                             <img src="{{ str_starts_with($settings['contact_image'], 'http') ? $settings['contact_image'] : asset('storage/' . $settings['contact_image']) }}"
                                 alt="Lead Photographer"
-                                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" decoding="async">
                         @else
                             <!-- Elegant Placeholder -->
                             <div class="w-full h-full relative overflow-hidden bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900 flex flex-col items-center justify-center transition-transform duration-700 group-hover:scale-110">
