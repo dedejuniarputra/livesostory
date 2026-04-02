@@ -7,6 +7,7 @@ use App\Models\SalaryPayment;
 use App\Models\TeamMember;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Str;
 
 class SalaryController extends Controller
 {
@@ -16,7 +17,7 @@ class SalaryController extends Controller
 
         $pdf = Pdf::loadView('admin.salary.slip', compact('salary'));
 
-        $filename = 'slip-gaji-' . str_replace(' ', '-', strtolower($salary->teamMember->name)) . '-' . $salary->payment_date->format('d-m-Y') . '.pdf';
+        $filename = 'slip-gaji-' . Str::slug($salary->teamMember->name) . '-' . $salary->payment_date->format('d-m-Y') . '.pdf';
 
         return $pdf->stream($filename);
     }

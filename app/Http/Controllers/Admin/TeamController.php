@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\TeamMember;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class TeamController extends Controller
 {
@@ -39,17 +40,23 @@ class TeamController extends Controller
         return view('admin.team.index', compact('members', 'allMembers'));
     }
 
-    public function report(TeamMember $team)
+    public function report(Request $request, TeamMember $team)
     {
+        $month = $request->get('month');
+
         $team->load([
-            'salaryPayments' => function ($query) {
+            'salaryPayments' => function ($query) use ($month) {
+                if ($month) {
+                    $query->whereMonth('start_date', date('m', strtotime($month . '-01')))
+                        ->whereYear('start_date', date('Y', strtotime($month . '-01')));
+                }
                 $query->latest('payment_date');
             }
         ]);
 
-        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.team.report', compact('team'));
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.team.report', compact('team', 'month'));
 
-        $filename = 'laporan-gaji-' . str_replace(' ', '-', strtolower($team->name)) . '.pdf';
+        $filename = 'laporan-gaji-' . Str::slug($team->name) . '.pdf';
 
         return $pdf->stream($filename);
     }

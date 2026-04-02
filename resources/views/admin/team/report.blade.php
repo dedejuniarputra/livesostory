@@ -89,7 +89,10 @@
 <body>
     <div class="header">
         <h1>LAPORAN RINGKASAN GAJI</h1>
-        <p>Tanggal Pembayaran: {{ date('d F Y') }}</p>
+        @if($month)
+            <p>Periode: {{ \Carbon\Carbon::parse($month . '-01')->format('F Y') }}</p>
+        @endif
+        <p>Tanggal Cetak: {{ date('d F Y') }}</p>
     </div>
 
     <div class="info-grid">

@@ -109,7 +109,8 @@
                             </td>
                             <td class="px-6 py-4">
                                 <div class="flex items-center justify-end gap-3">
-                                    <a href="{{ route('admin.team.report', $member) }}" target="_blank"
+                                    <a href="{{ route('admin.team.report', [$member, 'month' => request('month', date('Y-m'))]) }}"
+                                        target="_blank"
                                         class="text-[10px] uppercase tracking-wider border border-emerald-500/30 text-emerald-500 px-3 py-1.5 rounded hover:bg-emerald-500/10 transition-all">Cetak
                                         Slip</a>
                                     <a href="{{ route('admin.team.edit', $member) }}"

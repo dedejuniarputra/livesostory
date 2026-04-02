@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Str;
 
 class BookingController extends Controller
 {
@@ -133,7 +134,7 @@ class BookingController extends Controller
         $pdf = Pdf::loadView('admin.bookings.invoice', compact('booking'))
             ->setPaper('a4', 'portrait');
 
-        $filename = 'INVOICE - ' . $booking->name . '.pdf';
+        $filename = 'INVOICE - ' . Str::slug($booking->name) . '.pdf';
 
         return $pdf->download($filename);
     }
