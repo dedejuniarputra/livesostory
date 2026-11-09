@@ -1,5 +1,11 @@
 @extends('admin.layout')
 @section('header', 'Edit Booking')
+@php
+    $selectedBookingDate = old('booking_date', $booking->booking_date?->format('Y-m-d') ?? '');
+    $selectedBookingText = $booking->booking_date ? $booking->booking_date->format('d M Y') : 'Belum dipilih';
+    $calendarMonth = $booking->booking_date ? (int) $booking->booking_date->format('m') - 1 : (int) now()->format('m') - 1;
+    $calendarYear = $booking->booking_date ? (int) $booking->booking_date->format('Y') : (int) now()->format('Y');
+@endphp
 @section('content')
 
     <div class="max-w-4xl">
@@ -122,9 +128,9 @@
                             </div>
 
                             <input type="hidden" name="booking_date" id="selected-date"
-                                value="{{ old('booking_date', $booking->booking_date->format('Y-m-d')) }}" required>
+                                value="{{ $selectedBookingDate }}" required>
                             <p id="selected-date-text" class="text-sm text-gold-400 mt-2">Tanggal dipilih:
-                                {{ $booking->booking_date->format('d M Y') }}</p>
+                                {{ $selectedBookingText }}</p>
                             @error('booking_date') <p class="text-red-500 text-[10px] mt-1">{{ $message }}</p> @enderror
                         </div>
                         <div>
@@ -205,10 +211,10 @@
         // Calendar functionality
         const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
 
-        let currentMonth = {{ (int) $booking->booking_date->format('m') - 1 }};
-        let currentYear = {{ (int) $booking->booking_date->format('Y') }};
+        let currentMonth = {{ $calendarMonth }};
+        let currentYear = {{ $calendarYear }};
         let datesData = {};
-        let selectedDate = '{{ old('booking_date', $booking->booking_date->format('Y-m-d')) }}';
+        let selectedDate = '{{ $selectedBookingDate }}';
 
         async function fetchDates() {
             try {
